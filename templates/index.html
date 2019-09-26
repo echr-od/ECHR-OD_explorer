@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+              <h1 class="page-title">
+                Cases
+              </h1>
+            </div>
+            <div class="row row-cards row-deck">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Invoices</h3>
+                  </div>
+                  <div class="table-responsive">
+                    <table class="table card-table table-vcenter text-nowrap datatable">
+                      <thead>
+                        <tr>
+                          <th class="w-1">App. No(s).</th>
+                          <th class="w-1">Item ID</th>
+                          <th>Judgement date</th>
+                          <th data-toggle="tooltip" title="Importance of the case">Imp.</th>
+                          <th>
+                            Case <span class="small text-muted"> and parties</span>
+                          </th>
+                          <th>Country</th>
+                          <th>Articles</th>
+                          <th data-toggle="tooltip" title="Originated Body">Orig. Body</th>
+                          <th data-toggle="tooltip" title="Separate Opinion(s)">Sep. Op.</th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><span class="text-muted">30324/96</span></td>
+                          <td><span class="text-muted">001-60803</span></td>
+                          <td>Mar 12, 2002</td>
+                          <td>
+                            <a href="#" class="btn btn-pill btn-secondary btn-sm">4</a></td>
+                          <td>
+                            <div><a href="/cases/001-60803">SMOLEANU <span class="small text-muted">v.</span> ROMANIA</a></div>
+                            <div class="small text-muted">
+                              Parties: <a href="/cases/001-60803">SMOLEANU</a>, <a href="/cases/001-60803">ROMANIA</a>
+                            </div>
+                          </td>
+                          <td><i class="flag flag-ro"></i><span class="small text-muted"> Romania</span>
+                          </td>
+                          <td>
+                            <a href="#" class="btn btn-square btn-danger btn-sm" data-toggle="tooltip" title="Violation of Art. 6-1">6</a>
+                            <a href="#" class="btn btn-square btn-secondary btn-sm">41</a>
+                            <a href="#" class="btn btn-square btn-success btn-sm" data-toggle="tooltip" title="No violation of P1-1">P1</a>
+                            <a href="#" class="btn btn-square btn-secondary btn-sm">35</a>
+                          </td>
+                          
+                          <td>
+                            <div>Court</div>
+                            <div class="small text-muted">
+                              Second Section
+                            </div>
+                          </td>
+                           <td>
+                            Yes
+                          </td>
+                          <td class="text-right">
+                            <a href="javascript:void(0)" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="Judgement doc. available">
+                             <i class="fa fa-balance-scale"></i> <span class="status-icon bg-success"></span>
+                            </a>
+                            <a href="javascript:void(0)" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="Parsed judgement available">
+                              <i class="fa fa-address-card-o"></i> <span class="status-icon bg-success"></span>
+                            </a>
+                            <a href="javascript:void(0)" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="Bag-of-Words available">
+                              <i class="fa fa-file-o"></i> <span class="status-icon bg-success"></span>
+                            </a>
+                            <a href="javascript:void(0)" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="TF-IDF unavailable">
+                              <i class="fa fa-sticky-note-o"></i> <span class="status-icon bg-danger"></span>
+                            </a>
+                          </td>
+                          <td class="text-center">
+                            <div class="item-action dropdown">
+                              <a href="javascript:void(0)" data-toggle="dropdown" class="icon"><i class="fe fe-more-vertical"></i></a>
+                              <div class="dropdown-menu dropdown-menu-right">
+                                <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fe fe-tag"></i> Action </a>
+                                <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fe fe-edit-2"></i> Another action </a>
+                                <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fe fe-message-square"></i> Something else here</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fe fe-link"></i> Separated link</a>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <script>
+                      document.addEventListener('DOMContentLoaded', function(event) {
+                        console.log("{{ url_for('static', path='cases.json') }}")
+                              $('.datatable').DataTable({
+                                "columnDefs": [ {
+                                "targets": 9,
+                                "orderable": false
+                                }, {
+                                "targets": 10,
+                                "orderable": false
+                                }  ]
+                              });  
+                      });
+                    </script>
+                  </div>
+                </div>
+              </div>
+            </div>
+{% endblock %}

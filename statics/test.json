@@ -1,0 +1,104 @@
+{
+  "data": [
+    {
+        "applicability": "", 
+        "appno": "30324/96", 
+        "article": [
+            "P1-1-1", 
+            "35-3", 
+            "35", 
+            "41", 
+            "6", 
+            "6-1", 
+            "P1-1"
+        ], 
+        "articles_": "6;6-1;41;P1-1;P1-1-1;35;35-3", 
+        "conclusion": [
+            {
+                "article": "6", 
+                "element": "Violation of Art. 6-1", 
+                "type": "violation"
+            }, 
+            {
+                "article": "p1", 
+                "element": "No violation of P1-1", 
+                "type": "no-violation"
+            }, 
+            {
+                "element": "Pecuniary damage - claim dismissed", 
+                "type": "other"
+            }, 
+            {
+                "element": "Non-pecuniary damage - financial award", 
+                "type": "other"
+            }
+        ], 
+        "conclusion_": "Violation of Art. 6-1;No violation of P1-1;Pecuniary damage - claim dismissed;Non-pecuniary damage - financial award", 
+        "decisiondate": "", 
+        "docname": "CASE OF SMOLEANU v. ROMANIA", 
+        "doctypebranch": "CHAMBER", 
+        "documentcollectionid": [
+            "CASELAW", 
+            "JUDGMENTS", 
+            "CHAMBER", 
+            "ENG"
+        ], 
+        "ecli": "ECLI:CE:ECHR:2002:1203JUD003032496", 
+        "externalsources": [], 
+        "extractedappno": [
+            "30324/96", 
+            "28342/95", 
+            "25497/94", 
+            "33071/96", 
+            "7775/77", 
+            "49144/99", 
+            "32911/96", 
+            "35237/97", 
+            "34595/97"
+        ], 
+        "importance": "4", 
+        "introductiondate": "", 
+        "issue": [], 
+        "itemid": "001-60803", 
+        "judgementdate": "03/12/2002 00:00:00", 
+        "kpdate": "03/12/2002 00:00:00", 
+        "kpthesaurus": [
+            "445", 
+            "7", 
+            "40", 
+            "369", 
+            "311", 
+            "94", 
+            "14", 
+            "402", 
+            "216"
+        ], 
+        "languageisocode": "ENG", 
+        "originatingbody": "5", 
+        "parties": [
+            "SMOLEANU", 
+            "ROMANIA"
+        ], 
+        "rank": "516.095153808594", 
+        "representedby": [
+            "N/A"
+        ], 
+        "respondent": "ROU", 
+        "respondentOrderEng": "36", 
+        "scl": [
+            "Brumarescu v. Romania [GC], no. 28342/95, ECHR 1999-VII, pp. 250-256, \u00a7\u00a7 31-44, p. 261, \u00a7\u00a7 63-65", 
+            "Lupulet v. Romania, application no. 25497/94, decision of the Commission of 17 May 1996, Decisions and Reports (DR) 85-A, p. 126, p. 133", 
+            "Malhous v. Czech Republic (dec.), no. 33071/96, 13 December 2000, ECHR 2000-XII", 
+            "Mario de Napoles Pacheco v. Belgium, application no. 7775/77, decision of the Commission of 5 October 1978, DR 15, p. 143", 
+            "Meftah and Others v. France, [GC] nos. 32911/96, 35237/97 and 34595/97, \u00a7 61, ECHR 2002-...", 
+            "Ouzounis and Others v. Greece, no. 49144/99, \u00a7 25, 18 April 2002, unreported", 
+            "Pine Valley Developments Ltd and Others v. Ireland, judgment of 29 November 1991, Series A no. 222, p. 23, \u00a7 51", 
+            "Pressos Compania Naviera S.A. v. Belgium, judgment of 20 November 1995, Series A no. 332, p. 21, \u00a7 31", 
+            "Van der Mussele v. Belgium, judgment of 23 November 1983, Series A no. 70, p. 23, \u00a7 48"
+        ], 
+        "separateopinion": "FALSE", 
+        "sharepointid": "325757", 
+        "typedescription": "15"
+    }, 
+  ]
+}
