@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">
+        Connect
+    </h1>
+</div>
+<div class="row">
+    <div class="col-lg-3 order-lg-1 mb-4">
+
+        <!-- Getting started -->
+        <div class="list-group list-group-transparent mb-0">
+            <a href="#instructions" class="list-group-item list-group-item-action"><span class="icon mr-3"><i
+                    class="fe fe-flag"></i></span>Instructions</a>
+        </div>
+        <!-- Components -->
+        <div class="list-group list-group-transparent mb-0">
+            <a href="#1.0.1" class="list-group-item list-group-item-action"><span class="icon mr-3"><i
+                    class="fe fe-tag"></i></span><strong>APIs</strong></a>
+        </div>
+
+    </div>
+    <div class="col-lg-9">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-wrap p-lg-6">
+                    <h2 class="mt-0 mb-4">Instructions</h2>
+                    <p>The APIs are primarily intended for integration in application with a need to retrieve
+                        information at runtime.
+                        If you intend to use the data statically (e.g. classification using Machine Learning), please,
+                        <a href="/download/">download</a> the data you need at once.</p>
+                    <div class="alert alert-info">
+                        <strong>Info:</strong> There is no token or identification mechanism to use the API. It is fully
+                        open!
+                    </div>
+                    <div class="alert alert-warning">
+                        <strong>Warning:</strong> If you plan to use the API intensively, please contact us to check the
+                        load!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row row-cards row-deck">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">APIs</div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3">
+                        <h3 class="mt-0 mb-4">REST API</h3>
+                    </div>
+                    <div class="col-9">
+                        <p>REST, for Representational state tranfer, is a standard in design of stateless web API.</p>
+                        <a href="/doc/#rest">
+                            <div class="tag tag-blue">
+                                Reference
+                            </div>
+                        </a>
+
+                        <p></p>
+                    </div>
+                    <div class="col-3">
+                        <h3 class="mt-0 mb-4">GraphQL</h3>
+                    </div>
+                    <div class="col-9">
+                        <p>GraphQL is a relatively new data query and manipulation language to design API. It allows to create more complex queries to retreive only the necessary data and might be more suitable for complex workflows.</p>
+                        <a href="/doc/#graphql">
+                            <div class="tag">
+                                Coming soon...
+                            </div>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

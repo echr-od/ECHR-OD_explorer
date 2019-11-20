@@ -1,13 +1,233 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="page-header">
+            <div class="page-header">
               <h1 class="page-title">
-                SMOLEANU v. ROMANIA
+                {{ case.parties[0] }} v. {{ case.parties[1] }}
               </h1>
             </div>
             <div class="row row-cards row-deck">
-              <div class="col-lg-6">
+              <div class="col-lg-3">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="col-lg-12 order-lg-1 mb-4">
+                      <div class="list-group list-group-transparent mb-0">
+                        <a href="#case-info" class="list-group-item list-group-item-action"><span class="icon mr-3"><i class="fe fe-flag"></i></span>Case information</a>
+                        <a href="#judgment-document" class="list-group-item list-group-item-action"><span class="icon mr-3"><i class="fe fe-file-text"></i></span>Judgment document</a>
+                        <a href="#conclusions" class="list-group-item list-group-item-action"><span class="icon mr-3"><i class="fa fa-balance-scale"></i></span>Conclusions</a>
+                        <a href="#decision-body" class="list-group-item list-group-item-action"><span class="icon mr-3"><i class="fa fa-institution"></i></span>Decision body</a>
+                        <a href="#scl" class="list-group-item list-group-item-action"><span class="icon mr-3"><i class="fa fa-legal"></i></span>Strasbourg Case Law</a>
+                        <a href="#representers" class="list-group-item list-group-item-action"><span class="icon mr-3"><i class="fe fe-user"></i></span>Representers</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-9" id="case-info">
+                <div class="card">
+                  <div class="card-status bg-blue"></div>
+                  <div class="card-header">
+                    <h3 class="card-title">Case Information</h3>
+                    <div class="card-options">
+                      <a href="#" class="btn btn-primary btn-sm tablinks" onclick="openCity(event, 'info-general')" id="defaultOpen">General</a>
+                      <a href="#" class="btn btn-secondary btn-sm ml-2 tablinks" onclick="openCity(event, 'info-details')">Details</a>
+                      <a href="#" class="btn btn-secondary btn-sm ml-2 tablinks" onclick="openCity(event, 'info-timeline')">Timeline</a>
+                      <a href="#" class="btn btn-secondary btn-sm ml-2 tablinks" onclick="openCity(event, 'info-documents')">Documents</a>
+
+                        <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
+                    </div>
+                  </div>
+                    <table class="table card-table tabcontent" id="info-general">
+                      <tr>
+                        <td>ECLI</td>
+                        <td class="text-left"><span class="text-muted">{{ case.ecli }}</span></td>
+                      </tr>
+                      <tr>
+                        <td>App. No.</td>
+                        <td class="text-left"><span class="text-muted">{{ case.appno }}</span></td>
+                      </tr>
+                      <tr>
+                        <td>Parties</td>
+                        <td class="text-left"><span class="text-muted">{{ case.parties[0].title() }}, {{ case.parties[1].title() }}</span></td>
+                      </tr>
+                      <tr>
+                        <td>Respondent</td>
+                        <td class="text-left"><span class="text-muted"><i class="flag flag-{{case.country.alpha2}}"></i> {{ case.country.name }}</span></td>
+                      </tr>
+                      <tr>
+                        <td>Conclusion Summary <span class="small text-muted"><a href="#conclusions">[details]</a></span></td>
+                        <td class="text-left">
+                          {% for article in case.articles %}
+                              {% if article.article is not none %}
+                                <a href="#" class="btn btn-square {{ 'btn-danger' if article.type == 'violation' else 'btn-success' }} btn-sm" data-toggle="tooltip" title="{{ article.type.title() }} or Art. {{ article.article }}">{{ article.article }}</a>
+                              {% endif %}
+                            {% endfor %}
+                        </td>
+                      </tr>
+                    </table>
+                   <table class="table card-table tabcontent" id="info-details">
+                      <tr>
+                        <td>Importance</td>
+                        <td class="text-left"><span class="text-muted">{{ case.importance }}</span></td>
+                      </tr>
+                      <tr>
+                        <td>Originating Body</td>
+                        <td class="text-left"><span class="text-muted">{{ case.originatingbody.name }} ({{ case.originatingbody.type }})</span></td>
+                      </tr>
+                      <tr>
+                        <td>Rank</td>
+                        <td class="text-left"><span class="text-muted">{{ case.rank }}</span></td>
+                      </tr>
+                      <tr>
+                        <td>Type Description</td>
+                        <td class="text-left"><span class="text-muted">{{ case.typedescription }}</span></td>
+                      </tr>
+                  </table>
+                  <table class="table card-table tabcontent" id="info-timeline">
+                    <tr>
+                        <td>Introduction date</td>
+                        <td class="text-left"><span class="text-muted">{{ case.introductiondate if introductiondate else '-' }}</span></td>
+                      </tr>
+                      <tr>
+                        <td>Decision date</td>
+                        <td class="text-left"><span class="text-muted">{{ case.decisiondate if introductiondate else '-' }}</span></td>
+                      </tr>
+                      <tr>
+                        <td>Judgment date</td>
+                        <td class="text-left"><span class="text-muted">{{ case.judgementdate  if introductiondate else '-' }}</span></td>
+                      </tr>
+                  </table>
+                  <table class="table card-table tabcontent" id="info-documents">
+                    <tr>
+                        <td>Judgment</td>
+                        <td class="text-left">
+                            {% if 'judgment' in case.documents and case.documents.judgment.available %}
+                            <div class="tag">
+                              <b>Available</b>
+                              <a href="/api/v1/cases/{{case.itemid}}/docs/judgment"><span class="tag-addon" data-toggle="tooltip" title="Download judgment document"><i
+                                      class=" fe fe-download"></i></span></a>
+                            </div> <span class="text-muted">(Separate opinion: {{ 'Yes' if case.separateopinion else 'No' }})</span>
+                            {% else %}
+                            <div class="tag" data-toggle="tooltip" title="Judgment document not available">
+                              Non-available
+                            </div>
+                            {% endif %}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Parsed Judgment</td>
+                        <td class="text-left">
+                          {% if 'parsed_judgment' in case.documents and case.documents.parsed_judgment.available %}
+                          <div class="tag">
+                            <b>Available</b>
+                            <a href="/api/v1/cases/{{case.itemid}}/docs/parsed_judgment"><span class="tag-addon" data-toggle="tooltip" title="Download parsed judgment document"><i
+                                    class=" fe fe-download"></i></span></a>
+                          </div>
+                          {% else %}
+                          <div class="tag" data-toggle="tooltip" title="Parsed judgment document not available">
+                            Non-Available
+                          </div>
+                          {% endif %}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Bag-of-words</td>
+                        <td class="text-left">
+                          {% if 'bow' in case.documents and case.documents.bow.available %}
+                          <div class="tag">
+                            <b>Available</b>
+                            <a href="/api/v1/cases/{{case.itemid}}/docs/bow"><span class="tag-addon" data-toggle="tooltip" title="Download Bag-of-Words"><i
+                                    class=" fe fe-download"></i></span></a>
+                          </div>
+                          {% else %}
+                          <div class="tag" data-toggle="tooltip" title="Bag-of-Words not available">
+                            Non-Available
+                          </div>
+                          {% endif %}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>TF-IDF</td>
+                        <td class="text-left">
+                          {% if 'bow' in case.documents and case.documents.bow.available %}
+                          <div class="tag">
+                            <b>Available</b>
+                            <a href="/api/v1/cases/{{case.itemid}}/docs/tfidf"><span class="tag-addon" data-toggle="tooltip" title="Download TF-IDF"><i
+                                    class=" fe fe-download"></i></span></a>
+                          </div>
+                          {% else %}
+                          <div class="tag" data-toggle="tooltip" title="TF-IDF not available">
+                            Non-Available
+                          </div>
+                          {% endif %}
+                        </td>
+                      </tr>
+                    </div>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="row row-cards row-deck">
+              <div class="col-lg-2">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Cited App.</h3>
+                  </div>
+                     <table class="table card-table">
+                       {% for citation in case.extractedapps %}
+                       <tr class="small" style="height: 10px;line-height: 10px;min-height: 10px;">
+                         <td><a href="#{{ citation  .replace(' ', '_').replace('/','_') }}">{{ citation }}</a></td>
+                       </tr>
+                       {% endfor %}
+                    <tr class="small" style="height: 10px;line-height: 10px;min-height: 10px;"><td></td></tr>
+                  </table>
+
+                </div>
+              </div>
+              <div class="col-lg-10" id="judgment-document">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Judgment document</h3>
+                    <div class="card-options">
+                      <div class="card-options">
+                        <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
+                    </div>
+                    </div>
+                  </div>
+                  <div class="card-body" id="judgment-content">
+                    <div id="toc_container">
+                      <p class="toc_title">Content</p>
+                      <ul class="toc_list">
+                        {% for item in case.judgment recursive %}
+                        {%- if item.elements -%}
+                          <li style="list-style: none;"><a href="#{{ item.content.replace(' ', '_').lower() if not 'section_name' in item else item.section_name }}">{{ item.content if not 'section_name' in item else item.section_name.title() }}</a>
+                          <ul style="list-style: none;">{{ loop(item.elements) }}</ul>
+                        {%- endif -%}
+                        {% endfor %}
+                      </ul>
+                    </div>
+                    {% for item in case.judgment recursive %}
+                        <li style="list-style: none;">
+                          {%- if item.elements -%}
+                            {% if loop.index > 1 %}
+                              </br>
+                            {% endif %}
+                          <h{{ loop.depth }} id="{{ item.content.replace(' ', '_').lower() if not 'section_name' in item else item.section_name }}">{{ item.content }}</h{{ loop.depth }}>
+                          {%- else %}
+                            {{ item.content | regex_replace('^(\d+.)', '<b>\\1</b>') }}
+                          {%- endif %}
+                        {%- if item.elements -%}
+                          <ul style="list-style: none;">{{ loop(item.elements) }}</ul>
+                        {%- endif %}
+                        </li>
+                    {% endfor %}
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row row-cards row-deck">
+              <div class="col-lg-6" id="conclusions">
                 <div class="card">
                   <div class="card-header">
                     <h3 class="card-title">Conclusion</h3>
@@ -22,51 +242,39 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>  
-                          <td><a href="#" class="btn btn-square btn-success btn-sm" data-toggle="tooltip" title="No violation of Art.8">8</a></td>
-                          <td><div>No violation of Article 8 - Right to respect for private and family life</div>
+                      {% for conclusion in case.conclusions %}
+                        <tr>
+                          <td>
+                            {% if conclusion.type == 'violation' %}
+                            <a href="#" class="btn btn-square btn-danger btn-sm" data-toggle="tooltip" title="Violation of Art. {{ conclusion.article}}">
+                            {% elif conclusion.type == 'no-violation' %}
+                            <a href="#" class="btn btn-square btn-success btn-sm" data-toggle="tooltip" title="No violation of Art. {{ conclusion.article}}">
+                            {% else %}
+                            <a href="#" class="btn btn-square btn-secondary btn-sm">
+                            {% endif %}
+                            {{ conclusion.article if conclusion.article else 'Other' }}
+                            </a>
+                          </td>
+                          <td><div>{{ conclusion.element }}</div>
+                            {% for detail in conclusion.details %}
                             <div class="small text-muted">
-                              Article 8 - Expulsion
-                            </div></td>
-                          <td><span class="badge badge-default">Conditional</span> <span class="badge badge-default">Nigeria</span><td>
-                        </tr>
-                        <tr>  
-                          <td><a href="#" class="btn btn-square btn-danger btn-sm" data-toggle="tooltip" title="Violation of Art. 6-1">6</a></td>
-                          <td><div>Violation of Art. 6-1</div></td>
-                          <td><td>
-                        </tr>
-                        <tr>  
-                          <td><a href="#" class="btn btn-square btn-danger btn-sm" data-toggle="tooltip" title="No violation of P1-1">P1-1</a></td>
-                          <td><div>No violation of P1-1</div></td>
-                          <td><td>
-                        </tr>
-                        <tr>  
-                          <td><a href="#" class="btn btn-square btn-secondary btn-sm" data-toggle="tooltip" title="Pecuniary damage - claim dismissed">Other</a></td>
-                          <td><div>Pecuniary damage - claim dismissed</div></td>
-                          <td><td>
-                        </tr>
-                        <tr>  
-                          <td><a href="#" class="btn btn-square btn-secondary btn-sm" data-toggle="tooltip" title="Non-pecuniary damage - financial award">Other</a></td>
-                          <td><div>Non-pecuniary damage - financial award</div></td>
-                          <td><td>
-                        </tr>
-                        <tr>  
-                          <td><a href="#" class="btn btn-square btn-secondary btn-sm" data-toggle="tooltip" title="Preliminary objections joined to merits and dismissed">35-1</a></td>
-                          <td><div>Preliminary objections joined to merits and dismissed</div>
-                            <div class="small text-muted">
-                              Article 35-1 - Exhaustion of domestic remedies
+                              {{ detail }}
                             </div>
-                            <div class="small text-muted">
-                              Six month period
-                            </div></td>
-                          <td><td>
+                            {% endfor %}
+                          </td>
+                          <td>
+                            {% for mention in conclusion.mentions %}
+                              <span class="badge badge-default">{{ mention }}</span>
+                            {% endfor %}
+                          <td>
                         </tr>
+                      {% endfor %}
                       </tbody>
                     </table>
                   </div>
                 </div>
               </div>
-              <div class="col-lg-4">
+              <div class="col-lg-6" id="decision-body">
                 <div class="card">
                   <div class="card-header">
                     <h3 class="card-title">Decision Body</h3>
@@ -80,11 +288,13 @@
                         </tr>
                       </thead>
                       <tbody>
+                        {% for member in case.decisionbody %}
                         <tr>
-                          <td class="w-1"><span class="avatar">GW</span></td>
-                          <td>Mr. G. Wiarda</td>
-                          <td>President</td>
+                          <td class="w-1"><span class="avatar">{% for w in [member.name.split()[0], member.name.split()[-1]] %}{{w[0]}}{% endfor %} </span></td>
+                          <td>{{ member.name }}</td>
+                          <td>{{ member.role }}</td>
                         </tr>
+                        {% endfor %}
                       </tbody>
                     </table>
                   </div>
@@ -92,53 +302,77 @@
               </div>
             </div>
             <div class="row row-cards row-deck">
-              <div class="col-lg-2">
+              <div class="col-lg-8" id="scl">
                 <div class="card">
                   <div class="card-header">
-                    <h3 class="card-title">Cited App.</h3>
+                    <h3 class="card-title">Strasbourg Case Law</h3>
                   </div>
-                     <table class="table card-table">
-                    <tr class="small" style="height: 10px;line-height: 10px;min-height: 10px;">
-                      <td>30324/96</td>
-                    </tr>
-                    <tr class="small" style="height: 10px;line-height: 10px;min-height: 10px;">
-                      <td>30324/96</td>
-                    </tr>
-                    <tr class="small" style="height: 10px;line-height: 10px;min-height: 10px;">
-                      <td>30324/96</td>
-                    </tr>
-                    <tr class="small" style="height: 10px;line-height: 10px;min-height: 10px;"><td></td></tr>
-                  </table>
-                  <div class="card-header">
-                    <h3 class="card-title">Keywords</h3>
-                  </div>
-                  <div class="card-body">
-                    -
+                  <div class="table-responsive">
+                    <table class="table card-table table-striped table-vcenter" id="conclusion">
+                      <thead>
+                        <tr>
+                          <th>Reference</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for ref in case.scl %}
+                        <tr>
+                          <td>{{ ref }}<td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
-              <div class="col-lg-10">
+              <div class="col-lg-4" id="representers">
                 <div class="card">
                   <div class="card-header">
-                    <h3 class="card-title">Judgement document</h3>
-                    <div class="card-options">
-                      <form action="">
-                        <div class="input-group">
-                          <input type="text" class="form-control form-control-sm" placeholder="Search something..." name="s">
-                          <span class="input-group-btn ml-2">
-                            <button class="btn btn-sm btn-default" type="submit">
-                              <span class="fe fe-search"></span>
-                            </button>
-                          </span>
-                        </div>
-                      </form>
-                    </div>
+                    <h3 class="card-title">Represented by</h3>
                   </div>
-                  <div class="card-body">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam deleniti fugit incidunt, iste, itaque minima neque pariatur perferendis sed suscipit velit vitae voluptatem. A consequuntur, deserunt eaque error nulla temporibus!
+                  <div class="table-responsive">
+                    <table class="table card-table table-striped table-vcenter" id="conclusion">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for rep in case.representedby %}
+                        <tr>
+                          <td>{{ rep }}<td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
             </div>
+
+            <script>
+            document.getElementById("defaultOpen").click();
+            function openCity(evt, cityName) {
+              // Declare all variables
+              var i, tabcontent, tablinks;
+
+              // Get all elements with class="tabcontent" and hide them
+              tabcontent = document.getElementsByClassName("tabcontent");
+              for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+              }
+
+              // Get all elements with class="tablinks" and remove the class "active"
+              tablinks = document.getElementsByClassName("tablinks");
+              for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+              }
+
+              // Show the current tab, and add an "active" class to the button that opened the tab
+              document.getElementById(cityName).style.display = "table ";
+              evt.currentTarget.className += " active";
+            }
+            </script>
+
             
 {% endblock %}

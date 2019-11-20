@@ -26,6 +26,7 @@
     <script src="{{ url_for('assets', path='/js/core.js') }}"></script>
     <script src="{{ url_for('assets', path='/js/dashboard.js') }}"></script>
     <link href="{{ url_for('assets', path='/css/dashboard.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('assets', path='/css/jqtree.css') }}" rel="stylesheet" />
 
 
     <script src="{{ url_for('assets', path='/js/vendors/jquery.sparkline.min.js') }}"></script>
@@ -35,6 +36,7 @@
     <script src="{{ url_for('assets', path='/js/vendors/jquery-jvectormap-de-merc.js') }}"></script>
     <script src="{{ url_for('assets', path='/js/vendors/jquery-jvectormap-world-mill.js') }}"></script>
     <script src="{{ url_for('assets', path='/js/vendors/circle-progress.min.js') }}"></script>
+    <script src="{{ url_for('assets', path='/js/vendors/tree.jquery.js') }}"></script>
 
 
     <!-- c3.js Charts Plugin -->
@@ -55,7 +57,7 @@
         <div class="header py-4">
           <div class="container">
             <div class="d-flex">
-              <a class="header-brand" href="./index.html">
+              <a class="header-brand" href="/">
                 <img src="{{ url_for('assets', path='/images/logo.png') }}" class="header-brand-img" alt="ECHR OpenData logo"> ECHR OpenData Explorer
               </a>
               
@@ -82,7 +84,16 @@
                     <a href="/" class="nav-link active"><i class="fe fe-home"></i> Home</a>
                   </li>
                   <li class="nav-item">
-                    <a href="./docs/index.html" class="nav-link"><i class="fe fe-file-text"></i> Documentation</a>
+                    <a href="/explore/" class="nav-link"><i class="fe fe-database"></i> Explore</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="/download/" class="nav-link"><i class="fe fe-package"></i> Download</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="/connect/" class="nav-link"><i class="fe fe-code"></i> Connect&nbsp;<span class="small">(API)</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="/doc/" class="nav-link"><i class="fe fe-file-text"></i> Documentation</a>
                   </li>
                 </ul>
               </div>
@@ -102,8 +113,7 @@
               <div class="row align-items-center">
                 <div class="col-auto">
                   <ul class="list-inline list-inline-dots mb-0">
-                    <li class="list-inline-item"><a href="./docs/index.html">Documentation</a></li>
-                    <li class="list-inline-item"><a href="./faq.html">FAQ</a></li>
+                    <li class="list-inline-item"><a href="/doc/">Documentation</a></li>
                   </ul>
                 </div>
               </div>

@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block content %}
+            <div class="page-header">
+              <h1 class="page-title">
+                Download
+              </h1>
+            </div>
+            <div class="row">
+              <div class="col-lg-3 order-lg-1 mb-4">
+
+                <!-- Getting started -->
+                <div class="list-group list-group-transparent mb-0">
+                  <a href="#instructions" class="list-group-item list-group-item-action"><span class="icon mr-3"><i class="fe fe-flag"></i></span>Instructions</a>
+                </div>
+                <!-- Components -->
+                <div class="list-group list-group-transparent mb-0">
+                    <a href="#1.0.1" class="list-group-item list-group-item-action"><span class="icon mr-3"><i class="fe fe-tag"></i></span><strong>Version 2.0.0 (current)</strong></a>
+                </div>
+
+              </div>
+              <div class="col-lg-9">
+                <div class="card" id="instructions">
+                  <div class="card-body">
+                    <div class="text-wrap p-lg-6">
+                      <h2 class="mt-0 mb-4">Instructions</h2>
+                      <p>All versions of the <strong>ECHR OpenData project</strong> are available with different options:</p>
+                      <ol>
+                        <li><strong>Data Format</strong>: defines the type of data to download among <code>structured</code>, <code>unstructured</code> and <code>raw</code>.</li>
+                        <li><strong>Data Type</strong>: Among a specific data format, several type of data are available. For instance, for <code>structured</code> format, case descriptions are available, as well as a Bag-of-Words or TF-IDF representation of judgments.</li>
+                        <li><strong>Extension</strong>: defines the actual extension of a file to download.
+                            The available extension depends on the data format and data type. For instance, the structured data are available in (flat) <code>json</code>, <code>csv</code> and <code>sqlite</code> for basic information</li>
+                      </ol>
+                      <h3>What files do I need?</h3>
+                      <p>It depends on your usage! Structured information are made to be directly readable by popular data manipulation libraries such as <code>panda</code> or <code>numpy</code> and are therefore easy to use with machine learning libraries such as <code>scikit-learn</code>.</p>
+                      <h3>How the data are retrieved and processed?</h3>
+                        <p>Refer to the <a href="/doc/#creation_process">documentation</a>!</p>
+                    </div>
+                  </div>
+                 </div>
+              </div>
+
+            </div>
+            <div class="row row-cards">
+            <div class="col">
+                <div class="card" id="2.0.0">
+                  <div class="card-header">
+                      <div class="card-title"><strong>Version 2.0.0(current)</strong></div>
+                  </div>
+                  <div class="card-body">
+                      <a href="https://github.com/echr-od/ECHR-OD_process/tree/develop/changelog/2.0.0.md#release_notes"><strong>READ THE RELEASE NOTES</strong></a></br></br>
+
+                      <a href="https://github.com/echr-od/ECHR-OD_process/tree/develop/changelog/2.0.0.md#data_structure"><strong>DATA STRUCTURE</strong></a></br></br>
+
+                      <div class="row">
+
+                      <div class="col-2">
+                        <h4 class="mt-0 mb-4">All-in-One</h4>
+                      </div>
+                      <div class="col-10">
+                          <strong>All files together</strong>:
+                          <a href="/download/2.0.0/all/all/zip">
+                            <div class="tag tag-blue">
+                              Zip
+                              <span class="tag-addon"><i class="fe fe-download"></i></span>
+                            </div></a>
+                            <p>This archive include every files listed below, including the SQLite database.</p>
+
+                        <strong>SQLite database</strong>:
+                          <a href="/download/2.0.0/all/all/sqlite">
+                            <div class="tag tag-blue">
+                              SQLite
+                              <span class="tag-addon"><i class="fe fe-download"></i></span>
+                            </div></a>
+                            <p>The SQLite database contains all the structured information about cases as well as the parsed documents in JSON format.</p>
+                            <div class="alert alert-info">
+                            <strong>Info:</strong> Does not contain the raw documents nor the Bag-of-Words and TF-IDF representation of judgment documents.
+                            </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-2">
+                        <h4 class="mt-0 mb-4">Structured</h4>
+                      </div>
+                      <div class="col-10">
+                       <strong>Cases description</strong>:
+                          <a href="/download/2.0.0/structured/normalized_cases/csv">
+                            <div class="tag tag-blue">
+                              CSV
+                              <span class="tag-addon"><i class="fe fe-download"></i></span>
+                            </div></a>
+                          <a href="/download/2.0.0/structured/normalized_cases/json">
+                            <div class="tag tag-blue">
+                              JSON
+                              <span class="tag-addon"><i class="fe fe-download"></i></span>
+                            </div>
+                          </a>
+                        <p>Include structured information about cases.</p>
+                        <strong>Decision Body matrice</strong>:
+                           <a href="/download/2.0.0/structured/matrice_decision_body/json">
+                          <div class="tag tag-blue">
+                              JSON
+                              <span class="tag-addon"><i class="fe fe-download"></i></span>
+                          </div></a>
+                        <p>Relation between cases and persons in their respective decision body.</p>
+                        <strong>Conclusion matrice</strong>:
+                           <a href="/download/2.0.0/structured/conclusion/json">
+                          <div class="tag tag-blue">
+                              JSON
+                              <span class="tag-addon"><i class="fe fe-download"></i></span>
+                            </div>
+                           </a>
+                        <p>Relation between cases and their respective conclusion elements.</p>
+                        <strong>Extracted Apps matrice</strong>:
+                           <a href="/download/2.0.0/structured/matrice_appnos/json">
+                          <div class="tag tag-blue">
+                              JSON
+                              <span class="tag-addon"><i class="fe fe-download"></i></span>
+                            </div>
+                           </a>
+                        <p>Relation between cases through the citations in their respective judgment documents.</p>
+                        <strong>Representents matrice</strong>:
+                           <a href="/download/2.0.0/structured/matrice_representents/json">
+                          <div class="tag tag-blue">
+                              JSON
+                              <span class="tag-addon"><i class="fe fe-download"></i></span>
+                            </div>
+                           </a>
+                        <p>Relation between cases and representents</p>
+                        <strong>Strasbourg Case Law matrice</strong>:
+                          <a href="/download/2.0.0/structured/matrice_scl/json">
+                          <div class="tag tag-blue">
+                              JSON
+                              <span class="tag-addon"><i class="fe fe-download"></i></span>
+                            </div>
+                          </a>
+                        <p>Relation between cases through the relevant Strasbourg Case Law.</p>
+                        <strong>Bag-of-Words matrice</strong>:
+                          <a href="/download/2.0.0/structured/bow/libsvm">
+                          <div class="tag tag-blue">
+                              libsvm
+                              <span class="tag-addon"><i class="fe fe-download"></i></span>
+                            </div>
+                          </a>
+                        <p>Bag-of-Words represention judgment documents.</p>
+                        <strong>TF-IDF matrice</strong>:
+                          <a href="/download/2.0.0/structured/tfidf/libsvm">
+                          <div class="tag tag-blue">
+                              libsvm
+                              <span class="tag-addon"><i class="fe fe-download"></i></span>
+                            </div>
+                          </a>
+                        <p>TF-IDF represention judgment documents.</p>
+                      </div>
+                    </div>
+                       <div class="row">
+                      <div class="col-2">
+                        <h4 class="mt-0 mb-4">Unstructured</h4>
+                      </div>
+                      <div class="col-10">
+
+                        <strong>Cases description + Parsed judgments</strong>:
+                          <a href="/download/2.0.0/unstructured/cases/json">
+                            <div class="tag tag-blue">
+                              JSON
+                              <span class="tag-addon"><i class="fe fe-download"></i></span>
+                            </div>
+                          </a>
+                          <p>Case descriptions in a non-flat JSON format, including the parsed judgements documents and all the matrices from the structures documents.</p>
+                      </div>
+                    </div><div class="row">
+                      <div class="col-2">
+                        <h4 class="mt-0 mb-4">Raw</h4>
+                      </div>
+                      <div class="col-10">
+                            <strong>Judgment documents</strong>:
+                          <a href="/download/2.0.0/raw/judgments/docx">
+                            <div class="tag tag-blue">
+                              docx
+                              <span class="tag-addon"><i class="fe fe-download"></i></span>
+                            </div>
+                          </a>
+                          <p>Raw judgment documents in Microsoft Word format.</p>
+                           <strong>Normalized judgment documents</strong>:
+                          <a href="/download/2.0.0/raw/normalized/txt">
+                            <div class="tag tag-blue">
+                              txt
+                              <span class="tag-addon"><i class="fe fe-download"></i></span>
+                            </div>
+                          </a>
+                          <p>Judgment documents preprocessed before being turned into Bag-of-Words.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+</div>
+{% endblock %}

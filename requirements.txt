@@ -1,5 +1,8 @@
 aiofiles
 jinja2
-starlette
+starlette==0.12.9
 fastapi[all]
 uvicorn
+peewee
+pyyaml
+pydantic

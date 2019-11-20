@@ -2,111 +2,169 @@
 
 {% block content %}
 <div class="page-header">
-              <h1 class="page-title">
-                Cases
-              </h1>
-            </div>
-            <div class="row row-cards row-deck">
-              <div class="col-12">
-                <div class="card">
-                  <div class="card-header">
-                    <h3 class="card-title">Invoices</h3>
+    <h1 class="page-title">
+        Homepage
+    </h1>
+</div>
+<div class="row">
+    <div class="col-lg-3 order-lg-1 mb-4">
+
+        <!-- Getting started -->
+        <div class="list-group list-group-transparent mb-0">
+            <a href="#the_project" class="list-group-item list-group-item-action"><span class="icon mr-3"><i
+                    class="fe fe-chevrons-right"></i></span>The project</a>
+        </div>
+        <!-- Components -->
+        <div class="list-group list-group-transparent mb-0">
+            <a href="#where_to_start" class="list-group-item list-group-item-action"><span class="icon mr-3"><i
+                    class="fe fe-chevrons-right"></i></span><strong>Where to start</strong></a>
+            <a href="#contributing" class="list-group-item list-group-item-action"><span class="icon mr-3"><i
+                    class="fe fe-chevrons-right"></i></span>Contributing</a>
+            <a href="#licensing" class="list-group-item list-group-item-action"><span class="icon mr-3"><i
+                    class="fe fe-chevrons-right"></i></span>Licensing</a>
+            <a href="#citing" class="list-group-item list-group-item-action"><span class="icon mr-3"><i
+                    class="fe fe-chevrons-right"></i></span>Citing</a>
+        </div>
+
+    </div>
+    <div class="col-lg-9">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-wrap p-lg-6">
+                    <h2 class="mt-0 mb-4">European Court of Human Rights OpenData project</h2>
+                    <h3 id="the_project">The project</h3>
+                    <p>The <strong>European Court of Human Rights OpenData (ECHR-OD)</strong> project aims at providing formatted and
+                        standardized open data about the European Court of Human Rights (ECHR) in order to draw the attention of Data Scientists,
+                        Machine Learning practionners as well as researchers on legal analysis and related area.</p>
+
+                    <strong><acronym title="European Court of Human Rights OpenData" lang="en">ECHR-OD</acronym></strong> is guided by three core values:
+                    <strong>reusibility</strong>, <strong>quality</strong> and <strong>availability</strong>.
+
+                    <p>To reach those objectives,
+                        <ul>
+                        <li>each version of the database and datasets are carefully versionned and publicly available, including the intermediate files,</li>
+                        <li>the integrality of the process and files produced are carefully documented,</li>
+                        <li>the script to retrieve the raw documents and build the database and dataset from scratch are open-source and carefully versionned,</li>
+                        <li>no data are manipulated by hand at any stage of the creation process.</li>
+                        </ul>
+                    </p>
+
+                    <div class="row">
+                    <div class="col-sm-6 col-lg-6">
+                    <div class="card p-6">
+                      <div class="d-flex align-items-center">
+                        <span class="stamp stamp-md bg-primary mr-3">
+                          <i class="fe fe-database"></i>
+                        </span>
+                        <div>
+                          <h4 class="m-0"><a href="/explore/">Explore</a></h4>
+                          <small class="text-muted">Explore online ECHR data</small>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="table-responsive">
-                    <table class="table card-table table-vcenter text-nowrap datatable">
-                      <thead>
-                        <tr>
-                          <th class="w-1">App. No(s).</th>
-                          <th class="w-1">Item ID</th>
-                          <th>Judgement date</th>
-                          <th data-toggle="tooltip" title="Importance of the case">Imp.</th>
-                          <th>
-                            Case <span class="small text-muted"> and parties</span>
-                          </th>
-                          <th>Country</th>
-                          <th>Articles</th>
-                          <th data-toggle="tooltip" title="Originated Body">Orig. Body</th>
-                          <th data-toggle="tooltip" title="Separate Opinion(s)">Sep. Op.</th>
-                          <th></th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td><span class="text-muted">30324/96</span></td>
-                          <td><span class="text-muted">001-60803</span></td>
-                          <td>Mar 12, 2002</td>
-                          <td>
-                            <a href="#" class="btn btn-pill btn-secondary btn-sm">4</a></td>
-                          <td>
-                            <div><a href="/cases/001-60803">SMOLEANU <span class="small text-muted">v.</span> ROMANIA</a></div>
-                            <div class="small text-muted">
-                              Parties: <a href="/cases/001-60803">SMOLEANU</a>, <a href="/cases/001-60803">ROMANIA</a>
-                            </div>
-                          </td>
-                          <td><i class="flag flag-ro"></i><span class="small text-muted"> Romania</span>
-                          </td>
-                          <td>
-                            <a href="#" class="btn btn-square btn-danger btn-sm" data-toggle="tooltip" title="Violation of Art. 6-1">6</a>
-                            <a href="#" class="btn btn-square btn-secondary btn-sm">41</a>
-                            <a href="#" class="btn btn-square btn-success btn-sm" data-toggle="tooltip" title="No violation of P1-1">P1</a>
-                            <a href="#" class="btn btn-square btn-secondary btn-sm">35</a>
-                          </td>
-                          
-                          <td>
-                            <div>Court</div>
-                            <div class="small text-muted">
-                              Second Section
-                            </div>
-                          </td>
-                           <td>
-                            Yes
-                          </td>
-                          <td class="text-right">
-                            <a href="javascript:void(0)" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="Judgement doc. available">
-                             <i class="fa fa-balance-scale"></i> <span class="status-icon bg-success"></span>
-                            </a>
-                            <a href="javascript:void(0)" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="Parsed judgement available">
-                              <i class="fa fa-address-card-o"></i> <span class="status-icon bg-success"></span>
-                            </a>
-                            <a href="javascript:void(0)" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="Bag-of-Words available">
-                              <i class="fa fa-file-o"></i> <span class="status-icon bg-success"></span>
-                            </a>
-                            <a href="javascript:void(0)" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="TF-IDF unavailable">
-                              <i class="fa fa-sticky-note-o"></i> <span class="status-icon bg-danger"></span>
-                            </a>
-                          </td>
-                          <td class="text-center">
-                            <div class="item-action dropdown">
-                              <a href="javascript:void(0)" data-toggle="dropdown" class="icon"><i class="fe fe-more-vertical"></i></a>
-                              <div class="dropdown-menu dropdown-menu-right">
-                                <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fe fe-tag"></i> Action </a>
-                                <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fe fe-edit-2"></i> Another action </a>
-                                <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fe fe-message-square"></i> Something else here</a>
-                                <div class="dropdown-divider"></div>
-                                <a href="javascript:void(0)" class="dropdown-item"><i class="dropdown-icon fe fe-link"></i> Separated link</a>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <script>
-                      document.addEventListener('DOMContentLoaded', function(event) {
-                        console.log("{{ url_for('static', path='cases.json') }}")
-                              $('.datatable').DataTable({
-                                "columnDefs": [ {
-                                "targets": 9,
-                                "orderable": false
-                                }, {
-                                "targets": 10,
-                                "orderable": false
-                                }  ]
-                              });  
-                      });
-                    </script>
+
+                <div class="col-sm-6 col-lg-6">
+                    <div class="card p-6">
+                      <div class="d-flex align-items-center">
+                        <span class="stamp stamp-md bg-primary mr-3">
+                          <i class="fe fe-download"></i>
+                        </span>
+                        <div>
+                          <h4 class="m-0"><a href="/download/">Download</a></h4>
+                          <small class="text-muted">Download data to reuse</small>
+                        </div>
+                      </div>
+                    </div>
                   </div>
+                    </div>
+                         <div class="row">
+                <div class="col-sm-6 col-lg-6">
+                <div class="card p-6">
+                      <div class="d-flex align-items-center">
+                        <span class="stamp stamp-md bg-primary mr-3">
+                          <i class="fe fe-code"></i>
+                        </span>
+                        <div>
+                          <h4 class="m-0"><a href="/connect/">Connect <small>API</small></a></h4>
+                          <small class="text-muted">Integrate into your app</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <div class="col-sm-6 col-lg-6">
+                <div class="card p-6">
+                      <div class="d-flex align-items-center">
+                        <span class="stamp stamp-md bg-primary mr-3">
+                          <i class="fe fe-code"></i>
+                        </span>
+                        <div>
+                          <h4 class="m-0"><a href="/doc/">Documentation</a></h4>
+                          <small class="text-muted">References and examples</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                    </div>
+                    <div class="alert alert-info">
+                    <h3 id="where_to_start">Where to start?</h3>
+                    <p>
+                    <ul>
+                    <li>Reading the <a href="/doc/#creation_process"><strong>creation process</strong></a> or the <a href="/doc/#references"><strong>original article</strong></a>,</li>
+                    <li>Understanding the <a href="/explore/#"><strong>database structure</strong></a>,</li>
+                    <li>Reading the <a href="https://github.com/echr-od/ECHR-OD_process/tree/develop/changelog/2.0.0.md"><strong>latest Release Notes</strong></a>,</li>
+                    <li><a href="https://groups.google.com/forum/#!forum/echr-od"><strong>Subscribing to forumr</strong></a> to be kept informed about the new releases.</li>
+                    </ul>
+                    </p>
+                    </div>
+
+                    <h3 class="mt-0 mb-4" id="contributing">Contributing</h3>
+                    <strong><acronym title="European Court of Human Rights OpenData" lang="en">ECHR-OD</acronym></strong> accepts contributions under various forms:
+                    <ul>
+                    <li>New data sources provided it can be retrieved or rebuilt from scratch,</li>
+                    <li>Visualization and data explorations based on the provided data to enriche the project,</li>
+                    <li>Reports of misformed or incorrectly processed data (see <a href="/support/#report">here</a>),</li>
+                    <li>Datasets for any type of problems related to Machine Learning, Knowledge Management or Data Science, based on the database.</li>
+                    </ul>
+
+                    <h3 id="licensing">Licensing</h3>
+                    <p>You are free:
+                    <ul>
+                      <li><strong>To Share</strong>: To copy, distribute and use the database.</li>
+                      <li><strong>To Create</strong>: To produce works from the database.</li>
+                      <li><strong>To Adapt</strong>: To modify, transform and build upon the database.</li>
+                    </ul>
+                    </p>
+                    <p>
+                      As long as you:
+                    <ul>
+                      <li><strong>Attribute</strong>: You must attribute any public use of the database, or works produced from the database, in the manner specified in the ODbL. For any use or redistribution of the database, or works produced from it, you must make clear to others the license of the database and keep intact any notices on the original database.</li>
+                      <li><strong>Share-Alike</strong>: If you publicly use any adapted version of this database, or works produced from an adapted database, you must also offer that adapted database under the ODbL.</li>
+                      <li><strong>Keep open</strong>: If you redistribute the database, or an adapted version of it, then you may use technological measures that restrict the work (such as DRM) as long as you also redistribute a version without such measures.</li>
+                    </ul>
+                    </p>
+
+                    <h3 id="citing">Citing</h3>
+                    <p>If you plan to reuse any component of the <strong>ECHR-OD</strong> project, please cite as:
+                    <pre>@article{DBLP:journals/corr/abs-1810-03115,
+  author    = {Alexandre Quemy},
+  title     = {European Court of Human Right Open Data project},
+  journal   = {CoRR},
+  volume    = {abs/1810.03115},
+  year      = {2018},
+  url       = {http://arxiv.org/abs/1810.03115},
+  archivePrefix = {arXiv},
+  eprint    = {1810.03115},
+  timestamp = {Tue, 30 Oct 2018 10:49:09 +0100},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1810-03115},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}</pre>
+                    </p>
                 </div>
-              </div>
             </div>
+        </div>
+    </div>
+</div>
+
+
 {% endblock %}

@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+              <h1 class="page-title">
+                Explorer
+              </h1>
+            </div>
+            <div class="row row-cards row-deck">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Cases</h3>
+                  </div>
+                  <div class="table-responsive">
+                    <table class="table card-table table-vcenter text-nowrap datatable">
+                      <thead>
+                        <tr>
+                          <th class="w-1">Item ID</th>
+                          <th>Judg. date</th>
+                          <th>Judg. date sorting</th>
+                          <th data-toggle="tooltip" title="Importance of the case">Imp.</th>
+                          <th>
+                            Case <span class="small text-muted"> and parties</span>
+                          </th>
+                          <th>Country</th>
+                          <th>Articles</th>
+                          <th data-toggle="tooltip" title="Originating Body">Orig. Body</th>
+                          <th data-toggle="tooltip" title="Separate Opinion(s)">Sep. Op.</th>
+                          <th></th>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                      </tbody>
+                    </table>
+                    <script>
+                      ellipsis = function (data, cutoff) {
+                              return data.length > cutoff ?
+                                  data.substr( 0, cutoff ) +'…' :
+                                  data;
+                      };
+                      $.fn.dataTable.pipeline = function ( opts ) {
+                        // Configuration options
+                        var conf = $.extend( {
+                            pages: 5,     // number of pages to cache
+                            url: '',      // script url
+                            data: null,   // function or object with parameters to send to the server
+                                          // matching how `ajax.data` works in DataTables
+                            method: 'GET' // Ajax HTTP method
+                        }, opts );
+
+                        // Private variables for storing the cache
+                        var cacheLower = -1;
+                        var cacheUpper = null;
+                        var cacheLastRequest = null;
+                        var cacheLastJson = null;
+
+                        return function ( request, drawCallback, settings ) {
+                            var ajax          = false;
+                            var requestStart  = request.start;
+                            var drawStart     = request.start;
+                            var requestLength = request.length;
+                            var requestEnd    = requestStart + requestLength;
+
+                            if ( settings.clearCache ) {
+                                // API requested that the cache be cleared
+                                ajax = true;
+                                settings.clearCache = false;
+                            }
+                            else if ( cacheLower < 0 || requestStart < cacheLower || requestEnd > cacheUpper ) {
+                                // outside cached data - need to make a request
+                                ajax = true;
+                            }
+                            else if ( JSON.stringify( request.order )   !== JSON.stringify( cacheLastRequest.order ) ||
+                                      JSON.stringify( request.columns ) !== JSON.stringify( cacheLastRequest.columns ) ||
+                                      JSON.stringify( request.search )  !== JSON.stringify( cacheLastRequest.search )
+                            ) {
+                                // properties changed (ordering, columns, searching)
+                                ajax = true;
+                            }
+
+                            // Store the request for checking next time around
+                            cacheLastRequest = $.extend( true, {}, request );
+
+                            if ( ajax ) {
+                                // Need data from the server
+                                if ( requestStart < cacheLower ) {
+                                    requestStart = requestStart - (requestLength*(conf.pages-1));
+
+                                    if ( requestStart < 0 ) {
+                                        requestStart = 0;
+                                    }
+                                }
+
+                                cacheLower = requestStart;
+                                cacheUpper = requestStart + (requestLength * conf.pages);
+
+                                request.start = requestStart;
+                                request.length = requestLength*conf.pages;
+
+                                // Provide the same `data` options as DataTables.
+                                if ( typeof conf.data === 'function' ) {
+                                    // As a function it is executed with the data object as an arg
+                                    // for manipulation. If an object is returned, it is used as the
+                                    // data object to submit
+                                    var d = conf.data( request );
+                                    if ( d ) {
+                                        $.extend( request, d );
+                                    }
+                                }
+                                else if ( $.isPlainObject( conf.data ) ) {
+                                    // As an object, the data given extends the default
+                                    $.extend( request, conf.data );
+                                }
+
+                                settings.jqXHR = $.ajax( {
+                                    "type":     conf.method,
+                                    "url":      conf.url,
+                                    "data":     request,
+                                    "dataType": "json",
+                                    "cache":    false,
+                                    "success":  function ( json ) {
+                                        cacheLastJson = $.extend(true, {}, json);
+
+                                        if ( cacheLower != drawStart ) {
+                                            json.data.splice( 0, drawStart-cacheLower );
+                                        }
+                                        if ( requestLength >= -1 ) {
+                                            json.data.splice( requestLength, json.data.length );
+                                        }
+
+                                        drawCallback( json );
+                                    }
+                                } );
+                            }
+                            else {
+                                json = $.extend( true, {}, cacheLastJson );
+                                json.draw = request.draw; // Update the echo for each response
+                                json.data.splice( 0, requestStart-cacheLower );
+                                json.data.splice( requestLength, json.data.length );
+
+                                drawCallback(json);
+                            }
+                        }
+                    };
+
+                    // Register an API method that will empty the pipelined data, forcing an Ajax
+                    // fetch on the next draw (i.e. `table.clearPipeline().draw()`)
+                    $.fn.dataTable.Api.register( 'clearPipeline()', function () {
+                        return this.iterator( 'table', function ( settings ) {
+                            settings.clearCache = true;
+                        } );
+                    } );
+                      document.addEventListener('DOMContentLoaded', function(event) {
+                              $('.datatable').DataTable({
+                                "processing": true,
+                                "serverSide": true,
+                                "ajax": $.fn.dataTable.pipeline( {
+                                    url: "/load-cases/",
+                                    pages: 1 // number of pages to cache
+                                }),
+                                "columns": [ {
+                                   "data": function(row, type, set) { return '<span class="text-muted">' + row.itemid + '</span>'
+                                   }
+                                },
+                                {
+                                  "data": "judgementdate.display",
+                                  "orderData": 2
+                                },
+                                {
+                                  "data": "judgementdate.timestamp",
+                                  "visible": false
+                                },
+
+                                {
+                                  "data": function ( row, type, set ) {
+                                      return '<a href="#" class="btn btn-pill btn-secondary btn-sm">' + row.importance + '</a>'
+                                   }
+                                },
+                                {
+                                  "data": function ( row, type, set ) {
+                                      return '<div><a href="/cases/' + row.itemid + '">' + ellipsis(row.parties[0], 30) + ' <span class="small text-muted">v.</span> ' + ellipsis(row.parties[1], 20) + '</a></div>'
+                                            + '<div class="small text-muted">'
+                                              + 'Parties: <a href="/cases/' + row.itemid + '">' + ellipsis(row.parties[0], 30) + '</a>, <a href="/cases/' + row.itemid + '">' + ellipsis(row.parties[1], 20) + '</a>'
+                                            + '</div>'
+                                    }
+                                },
+                                {
+                                  "data": function ( row, type, set ) {
+                                      return '<i class="flag flag-' + row.country.alpha2 + '"></i> <span class="small text-muted">' + row.country.name + '</span>'
+                                    }
+                                },
+                                {
+                                  "data": function ( row, type, set ) {
+
+                                    content = '';
+                                    for (i in row.articles) {
+
+                                      if(row.articles[i].article != null) {
+
+                                        content += '<a href="#" class="btn btn-square '
+                                        if(row.articles[i].type == 'violation') {
+                                          content += 'btn-danger'
+                                        } else {
+                                          content += 'btn-success'
+                                        }
+                                        content += ' btn-sm" data-toggle="tooltip" title="' + row.articles[i].type.toUpperCase() + ' or Art. ' + row.articles[i].article + '">' + row.articles[i].article + '</a> '
+                                      }
+                                    }
+                                    return content
+                                    },
+                                    "orderable": false
+                                },
+                                {
+                                  "data": function ( row, type, set ) {
+                                              return '<div>' + row.originatingbody.type + '</div>'
+                                              + '<div class="small text-muted">' +
+                                                row.originatingbody.name
+                                              + '</div>'
+                                   },
+                                   "orderable": false
+                                },
+                                {
+                                  "data":  function ( row, type, set ) {
+                                        if(row.separateopinion) {  return  'Yes'  } else {  return  'False' }
+                                   }
+                                },
+                                {
+                                "data": function(row, type, set) {
+                                  content = '';
+                                  if(row.documents.hasOwnProperty("judgment") && row.documents.judgment.available) {
+                                  content += '<a href="/api/v1/cases/' + row.itemid + '/docs/judgment" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="Judgement doc. available">'
+                                  content += ' <i class="fa fa-balance-scale"></i> <span class="status-icon bg-success"></span>'
+                                  content += '</a>'
+                                  } else {
+                                  content += '<a href="javascript:void(0)" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="Judgement doc.  unavailable">'
+                                  content += '  <i class="fa fa-balance-scale"></i> <span class="status-icon bg-danger"></span>'
+                                  content += '</a>'
+                                  }
+                                  if(row.documents.hasOwnProperty("parsed_judgment") && row.documents.parsed_judgment.available) {
+                                  content += '<a href="/api/v1/cases/' + row.itemid + '/docs/parsed_judgment" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="Parsed judgement available">'
+                                  content += ' <i class="fa fa-address-card-o"></i> <span class="status-icon bg-success"></span>'
+                                  content += '</a>'
+                                  } else {
+                                  content += '<a href="javascript:void(0)" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="Parsed judgement unavailable">'
+                                  content += '  <i class="fa fa-address-card-o"></i> <span class="status-icon bg-danger"></span>'
+                                  content += '</a>'
+                                  }
+                                  if(row.documents.hasOwnProperty("bow") && row.documents.bow.available) {
+                                  content += '<a href="/api/v1/cases/' + row.itemid + '/docs/bow" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="Bag-of-Words available">'
+                                  content += ' <i class="fa fa-file-o"></i> <span class="status-icon bg-success"></span>'
+                                  content += '</a>'
+                                  } else {
+                                  content += '<a href="javascript:void(0)" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="Bag-of-Words unavailable">'
+                                  content += '  <i class="fa fa-file-o"></i> <span class="status-icon bg-danger"></span>'
+                                  content += '</a>'
+                                  }
+                                  if(row.documents.hasOwnProperty("tfidf") && row.documents.tfidf.available) {
+                                  content += '<a href="/api/v1/cases/' + row.itemid + '/docs/tfidf" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="TF-IDF  available">'
+                                  content += ' <i class="fa fa-sticky-note-o"></i> <span class="status-icon bg-success"></span>'
+                                  content += '</a>'
+                                  } else {
+                                  content += '<a href="javascript:void(0)" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="TF-IDF  unavailable">'
+                                  content += '  <i class="fa fa-sticky-note-o"></i> <span class="status-icon bg-danger"></span>'
+                                  content += '</a>'
+                                  }
+                                  return content
+
+                                },
+                                "orderable": false
+                                }
+                                ]
+                              });  
+                      });
+                    </script>
+                  </div>
+                </div>
+              </div>
+            </div>
+{% endblock %}
