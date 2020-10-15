@@ -6,16 +6,16 @@ from playhouse.shortcuts import model_to_dict
 from starlette.requests import Request
 from starlette.responses import FileResponse, JSONResponse
 
-from controllers.utils import DOCS_FOLDERS, CURRENT_RELEASE
 from controllers import case as c_case
 from controllers import party as c_party
 from controllers import representative as c_representative
 from controllers import scl as c_scl
 from controllers import conclusion as c_conclusion
 from schemas.case import Case as sCase
+from controllers.utils import DOCS_FOLDERS
+from utils.config import config
 
 api = FastAPI(openapi_prefix="/api/v1/")
-
 
 def custom_openapi():
     if api.openapi_schema:
@@ -36,7 +36,7 @@ api.openapi = custom_openapi
 
 @api.get('/version')
 def get_version():
-    return CURRENT_RELEASE
+    return '2.0.0'
 
 
 @api.get('/cases/{itemid}/docs')
@@ -52,7 +52,6 @@ def get_document(request: Request, itemid: str, doctype: str):
     case = c_case.get_case(itemid)
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
-    print(doctype)
     if doctype in DOCS_FOLDERS:
         if os.path.isfile(DOCS_FOLDERS[doctype](itemid)):
             filename = DOCS_FOLDERS[doctype](itemid).split('/')[-1]

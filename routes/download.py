@@ -7,6 +7,7 @@ from starlette.responses import FileResponse
 from config.template import templates
 from controllers import case as c_case
 from data_models.case import Case
+from utils.config import config
 
 router = APIRouter()
 
@@ -23,12 +24,12 @@ async def download_files(version: str, format: str, type_: str, extension: str):
     schema = {
         'all': {
             'all': {
-                'zip': lambda a, b, c, d: download_file(a, b, c, d),
+                'zip': lambda a, b, c, d: download_all_zip(a, b, c, d),
                 'sqlite': lambda a, b, c, d: download_all_sqlite(a, b, c, d)
             }
         },
         'structured': {
-            'normalized_cases': {
+            'cases': {
                 'csv': lambda a, b, c, d: download_file(a, b, c, d),
                 'json': lambda a, b, c, d: download_file(a, b, c, d)
             },
@@ -41,7 +42,7 @@ async def download_files(version: str, format: str, type_: str, extension: str):
             'matrice_scl': {
                 'json': lambda a, b, c, d: download_file(a, b, c, d)
             },
-            'matrice_representents': {
+            'matrice_representatives': {
                 'json': lambda a, b, c, d: download_file(a, b, c, d)
             },
             'bow': {
@@ -83,19 +84,19 @@ async def download_files(version: str, format: str, type_: str, extension: str):
 
 def download_all_sqlite(version, format, type_, extension):
     v = version.replace('.', '_')
-    sqlite_path = 'statics/data/releases/{}/{}/echr_{}.db'.format(version, format, v)
+    sqlite_path = '{}/structured/echr-db.db'.format(config()['data']['data_folder'], format, v)
     return FileResponse(sqlite_path, filename='echr_{}.db'.format(v))
 
 
-def download_all_zip(version):
+def download_all_zip(version, format, type_, extension):
     v = version.replace('.', '_')
-    archive_path = 'statics/data/releases/{}/echr_{}.zip'.format(version, v)
+    archive_path = '{}/all.zip'.format(config()['data']['data_folder'], v)
     return FileResponse(archive_path, filename='echr_{}.zip'.format(v))
 
 
 def download_file(version, format, type_, extension):
     v = version.replace('.', '_')
-    archive_path = 'statics/data/releases/{}/{}/{}.{}'.format(version, format, type_, extension)
+    archive_path = '{}/{}/{}.{}'.format(config()['data']['data_folder'], format, type_, extension)
     return FileResponse(archive_path, filename='echr_{}_{}_{}.{}'.format(v, format, type_, extension))
 
 
