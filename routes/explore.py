@@ -65,9 +65,11 @@ async def get_cases(request: Request):
             order_col = country_desc.collation(Case.respondent).desc()
     length = int(req['length'])
     page = (int(req['start']) // length) + 1
-    if 'value' in req['search']:
+    if 'value' in req['search'] and req['search']['value']:
         t = req['search']['value']
-        cases = Case.select().where(Case.docname.contains(t)).order_by(order_col).paginate(page, length)
+        cases = Case.select().where(Case.docname.contains(t)).order_by(order_col)
+        filtered_cases = cases.count()
+        cases = cases.paginate(page, length)
     else:
         cases = Case.select().order_by(order_col).paginate(page, length)
     res = []
@@ -95,7 +97,7 @@ async def get_cases(request: Request):
                     'timestamp': (int(datetime.timestamp(res[-1][k])))
                 }
     cases_number = Case.select().count()
-    filtered_cases_number = len(list(cases)) if 'value' in req['search'] else cases_number
+    filtered_cases_number = filtered_cases if 'value' in req['search'] and req['search']['value'] else cases_number
     return JSONResponse({'data': res, 'recordsTotal': cases_number, 'recordsFiltered': filtered_cases_number})
 
 
