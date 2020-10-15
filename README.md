@@ -2,21 +2,21 @@
 
 Install and run:
 
-```shell
-scripts/install
-scripts/run
+Starting the explorer requires ```docker```.
+
+To build the environment image:
 ```
+docker build -f Dockerfile -t echr_explorer .
+```
+As long as dependencies are not changed, there is no need to rebuild the image.
 
-Open `http://127.0.0.1:8000/` in your browser:
+The container requires two mountpoints:
+- the sources, mounted on `/tmp/echr_process/`
+- the data folder `<build>` from ECHR process, mounted on `/tmp/echr_process/static/data/`
 
-![Homepage](https://raw.githubusercontent.com/encode/starlette-example/master/docs/index.png)
-
-Navigate to path that is not routed, eg `http://127.0.0.1:8000/nope`:
-
-![Homepage](https://raw.githubusercontent.com/encode/starlette-example/master/docs/404.png)
-
-Raise a server error by navigating to `http://127.0.0.1:8000/error`:
-
-![Homepage](https://raw.githubusercontent.com/encode/starlette-example/master/docs/500.png)
-
-Switch the `app = Starlette(debug=True)` line to `app = Starlette()` to see a regular 500 page instead.
+Once the image is built, the container is started with:
+```
+docker run -ti 
+    --mount src=$(pwd),dst=/tmp/echr_explorer/,type=bind 
+    --mount src=<build>,dst=/tmp/echr_explorer/static/build,type=bind echr_explorer
+```
