@@ -1,6 +1,6 @@
 import peewee as pw
 
-db = pw.SqliteDatabase('./echr-db.db', pragmas={'foreign_keys': 1})
+db = pw.SqliteDatabase(None, pragmas={'foreign_keys': 1})
 
 
 class BaseModel(pw.Model):

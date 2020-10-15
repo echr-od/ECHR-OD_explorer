@@ -4,7 +4,9 @@ from fastapi import FastAPI
 from api.api import api
 from starlette.staticfiles import StaticFiles
 import uvicorn
+import os
 
+from utils.config import config
 from config.template import templates
 from data_models.base import db
 from data_models.case import Case
@@ -22,8 +24,9 @@ from data_models.scl import SCL
 from data_models.decisionbody import DecisionBodyMember, DecisionBodyCase
 from data_models.externalsource import ExternalSource
 
-with open('config/config.yaml') as file:
-    config = yaml.load(file)
+db_path = os.path.join(config()['data']['data_folder'], 'structured', 'echr-db.db')
+print(db_path)
+db.init(db_path)
 
 from routes import connect, doc, download, explore, homepage
 

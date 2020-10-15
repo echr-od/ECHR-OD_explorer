@@ -1,15 +1,14 @@
 import json
 from os import path
 
-# from app import config
+from utils.config import config
 
-df = 'statics/data/releases'
-CURRENT_RELEASE = '2.0.0'
+df = config()['data']['data_folder']
 
 DOCS_FOLDERS = {
-    'judgment': lambda x: path.join(df, CURRENT_RELEASE, 'raw/judgments/{}.docx'.format(x)),
-    'bow': lambda x: path.join(df, CURRENT_RELEASE, 'structured/bow/{}_bow.txt'.format(x)),
-    'tfidf': lambda x: path.join(df, CURRENT_RELEASE, 'structured/tfidf/{}_tfidf.txt'.format(x))
+    'judgment': lambda x: path.join(df, 'raw_documents/{}.docx'.format(x)),
+    'bow': lambda x: path.join(df, 'structured/bow/{}_bow.txt'.format(x)),
+    'tfidf': lambda x: path.join(df, 'structured/tfidf/{}_tfidf.txt'.format(x))
 }
 
 COUNTRIES = {}
