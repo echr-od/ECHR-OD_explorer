@@ -3,7 +3,7 @@ from os import path
 
 from utils.config import config
 
-df = config()['data']['data_folder']
+df = path.join(config()['data']['data_folder'], config()['data']['data_folder'])
 
 DOCS_FOLDERS = {
     'judgment': lambda x: path.join(df, 'raw_documents/{}.docx'.format(x)),

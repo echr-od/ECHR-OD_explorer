@@ -1,2 +1,3 @@
 data:
   data_folder: './static/build'
+  build_name: 'echr_database'
