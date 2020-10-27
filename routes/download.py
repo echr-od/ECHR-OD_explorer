@@ -84,19 +84,19 @@ async def download_files(version: str, format: str, type_: str, extension: str):
 
 def download_all_sqlite(version, format, type_, extension):
     v = version.replace('.', '_')
-    sqlite_path = '{}/structured/echr-db.db'.format(config()['data']['data_folder'], format, v)
+    sqlite_path = '{}/{}/structured/echr-db.db'.format(config()['data']['data_folder'], config()['data']['build_name'], format, v)
     return FileResponse(sqlite_path, filename='echr_{}.db'.format(v))
 
 
 def download_all_zip(version, format, type_, extension):
     v = version.replace('.', '_')
-    archive_path = '{}/all.zip'.format(config()['data']['data_folder'], v)
+    archive_path = '{}/{}/all.zip'.format(config()['data']['data_folder'], config()['data']['build_name'], v)
     return FileResponse(archive_path, filename='echr_{}.zip'.format(v))
 
 
 def download_file(version, format, type_, extension):
     v = version.replace('.', '_')
-    archive_path = '{}/{}/{}.{}'.format(config()['data']['data_folder'], format, type_, extension)
+    archive_path = '{}/{}/{}/{}.{}'.format(config()['data']['data_folder'], config()['data']['build_name'], format, type_, extension)
     return FileResponse(archive_path, filename='echr_{}_{}_{}.{}'.format(v, format, type_, extension))
 
 

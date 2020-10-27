@@ -3,10 +3,10 @@ from os import path
 
 from utils.config import config
 
-df = path.join(config()['data']['data_folder'], config()['data']['data_folder'])
+df = path.join(config()['data']['data_folder'], config()['data']['build_name'])
 
 DOCS_FOLDERS = {
-    'judgment': lambda x: path.join(df, 'raw_documents/{}.docx'.format(x)),
+    'judgment': lambda x: path.join(df, 'raw', 'judgments', '{}.docx'.format(x)),
     'bow': lambda x: path.join(df, 'structured/bow/{}_bow.txt'.format(x)),
     'tfidf': lambda x: path.join(df, 'structured/tfidf/{}_tfidf.txt'.format(x))
 }
