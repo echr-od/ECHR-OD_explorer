@@ -24,8 +24,7 @@ from data_models.scl import SCL
 from data_models.decisionbody import DecisionBodyMember, DecisionBodyCase
 from data_models.externalsource import ExternalSource
 
-db_path = os.path.join(config()['data']['data_folder'], 'structured', 'echr-db.db')
-print(db_path)
+db_path = os.path.join(config()['data']['data_folder'], config()['data']['build_name'], 'structured', 'echr-db.db')
 db.init(db_path)
 
 from routes import connect, doc, download, explore, homepage

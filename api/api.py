@@ -6,6 +6,7 @@ from playhouse.shortcuts import model_to_dict
 from starlette.requests import Request
 from starlette.responses import FileResponse, JSONResponse
 
+from controllers import build as c_build
 from controllers import case as c_case
 from controllers import party as c_party
 from controllers import representative as c_representative
@@ -34,6 +35,45 @@ def custom_openapi():
 api.openapi = custom_openapi
 
 
+@api.get('/build/status')
+def build_status():
+    status = c_build.is_building_in_progress()
+    latest_build = c_build.get_latest_build()
+    message = 'in progress' if status else latest_build['date']
+    color = 'green'
+    if status:
+        color = 'blue'
+    elif latest_build['date'] == 'never built':
+        color = 'grey'
+    return JSONResponse({"schemaVersion": 1, "label": "Database Update", "message": message, "color": color})
+
+
+@api.get('/build/update')
+def build_history():
+    return JSONResponse(c_build.update_build())
+
+@api.get('/build/history')
+def build_history():
+    return JSONResponse(c_build.get_build_history())
+
+
+@api.get('/build/latest')
+def build_history():
+    return JSONResponse(c_build.get_latest_build())
+
+
+@api.get('/build/current')
+def current_build():
+    return JSONResponse(c_build.get_current_build())
+
+@api.get('/build/available')
+def available_builds():
+    return JSONResponse(c_build.list_available_build_with_info())
+
+@api.get('/build/new_build_available')
+def new_build_available():
+    return JSONResponse(c_build.is_new_build_available())
+
 @api.get('/version')
 def get_version():
     return '2.0.0'
@@ -57,7 +97,6 @@ def get_document(request: Request, itemid: str, doctype: str):
             filename = DOCS_FOLDERS[doctype](itemid).split('/')[-1]
             return FileResponse(DOCS_FOLDERS[doctype](itemid), filename=filename)
     elif doctype == 'parsed_judgment':
-        print(case.judgment)
         return JSONResponse(case.judgment)
     raise HTTPException(status_code=404, detail="Could not find the document")
 
