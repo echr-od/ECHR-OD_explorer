@@ -69,7 +69,7 @@ def update_build():
     new_build_path = os.path.join(config()['data']['data_folder'], new_build)
     shutil.copytree(current_build, TRANSITION_DIR)
     shutil.rmtree(current_build)
-    os.rename(new_build_path, current_build)
+    shutil.copytree(new_build_path, current_build)
     output = subprocess.run(["cat", "/proc/self/cgroup"], stdout=subprocess.PIPE)
     output = [e for e in output.stdout.decode().splitlines() if 'docker' in e]
     cid = output[-1].split('/')[-1]
