@@ -154,6 +154,8 @@
                     } );
                       document.addEventListener('DOMContentLoaded', function(event) {
                               $('.datatable').DataTable({
+                                "stateSave": true,
+                                "order": [[ 2, "desc" ]],
                                 "processing": true,
                                 "serverSide": true,
                                 "ajax": $.fn.dataTable.pipeline( {
