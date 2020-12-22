@@ -26,13 +26,27 @@ def custom_openapi():
         version="1.0.0",
         description="European Court of Human Rights OpenData OpenAPI schema",
         routes=api.routes,
-        openapi_prefix="/api/v1"
+        #openapi_prefix="/api/v1"
     )
     api.openapi_schema = openapi_schema
     return api.openapi_schema
 
 
 api.openapi = custom_openapi
+
+
+@api.get("/stats")
+def get_stats():
+    res = list(c_case.get_stats().tuples())
+    res = [
+        {
+            'article': e[0],
+            'count': e[2],
+            'type': e[1],
+        }
+        for e in res
+    ]
+    return JSONResponse([c for c in res])
 
 
 @api.get('/build/status')
@@ -52,6 +66,7 @@ def build_status():
 def build_history():
     return JSONResponse(c_build.update_build())
 
+
 @api.get('/build/history')
 def build_history():
     return JSONResponse(c_build.get_build_history())
@@ -66,13 +81,16 @@ def build_history():
 def current_build():
     return JSONResponse(c_build.get_current_build())
 
+
 @api.get('/build/available')
 def available_builds():
     return JSONResponse(c_build.list_available_build_with_info())
 
+
 @api.get('/build/new_build_available')
 def new_build_available():
     return JSONResponse(c_build.is_new_build_available())
+
 
 @api.get('/version')
 def get_version():
@@ -109,12 +127,20 @@ def get_case(itemid: str):
     res = model_to_dict(case)
     res['parties'] = []
     for p in case.parties:
-        res['parties'].append(p.name)
+        res['parties'].append(p.party.name)
     return res
 
 
+@api.get("/cases/{itemid}/entities")
+def get_entities(itemid: str):
+    case = c_case.get_case(itemid)
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    return [model_to_dict(e.entity) for e in case.entities]
+
+
 @api.get("/cases/{itemid}/citedapps")
-def get_case(itemid: str):
+def get_citedapps(itemid: str):
     case = c_case.get_case(itemid)
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
@@ -128,7 +154,7 @@ def get_cases(page: int = 1, limit: int = 1000):
     for c in cases:
         parties = []
         for p in c.parties:
-            parties.append(p.name)
+            parties.append(p.party.name)
         res.append(model_to_dict(c))
         res[-1]['parties'] = parties
     return res

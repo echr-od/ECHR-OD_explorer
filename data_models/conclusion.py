@@ -9,6 +9,7 @@ class Conclusion(BaseModel):
     id = pw.AutoField()
     article = pw.CharField(null=True)
     element = pw.CharField()
+    base_article = pw.CharField(null=True)
     type = pw.CharField()
 
 

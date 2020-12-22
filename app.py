@@ -27,13 +27,14 @@ from data_models.externalsource import ExternalSource
 db_path = os.path.join(config()['data']['data_folder'], config()['data']['build_name'], 'structured', 'echr-db.db')
 db.init(db_path)
 
-from routes import connect, doc, download, explore, homepage
+from routes import connect, doc, download, explore, homepage, license
 
 app = FastAPI(debug=True)
 app.mount('/static', StaticFiles(directory='statics'), name='static')
 app.mount('/assets', StaticFiles(directory='statics/assets'), name='assets')
 
 app.include_router(homepage.router)
+app.include_router(license.router)
 app.include_router(explore.router)
 app.include_router(download.router)
 app.include_router(connect.router)

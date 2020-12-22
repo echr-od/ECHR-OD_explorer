@@ -1,11 +1,14 @@
 from datetime import datetime
 import os
 import re
-
+from spacy import displacy
 from playhouse.shortcuts import model_to_dict
-
+from bs4 import BeautifulSoup
 from controllers.utils import COUNTRIES, DOCS_FOLDERS
 from data_models.case import Case
+from data_models.conclusion import ConclusionCase, Conclusion
+from data_models.entity import Entity
+from peewee import fn
 
 
 def get_cases(page: int = 1, limit: int = 100):
@@ -16,7 +19,31 @@ def get_case(itemid: str):
     return Case.get_by_id(itemid)
 
 
-def get_case_info(itemid: str):
+def get_stats():
+    res = Case.select(Conclusion.article, Conclusion.type, fn.COUNT(Case.itemid)).join(ConclusionCase)\
+        .join(Conclusion)\
+        .where(Conclusion.article != None)\
+        .group_by(Conclusion.base_article, Conclusion.type)
+
+    return res
+
+
+def get_cases_per_country():
+    query = list(Case.select(Case.respondent, fn.COUNT(Case.respondent)).group_by(Case.respondent).tuples())
+    res = {}
+    for c in query:
+        for e in c[0].split(';'):
+            country = COUNTRIES[e]['name']
+            res[country] = res.get(country, 0) + c[1]
+    return res
+
+
+def get_cases_number():
+    res = Case.select(Case.itemid).count()
+    return res
+
+
+def get_case_info(itemid: str, with_html=False):
     case = get_case(itemid)
     if not case:
         return None
@@ -53,12 +80,33 @@ def get_case_info(itemid: str):
     res['country'] = COUNTRIES[case.respondent.split(';')[0]]
     res['originatingbody'] = {'name': case.originatingbody_name, 'type': case.originatingbody_type}
     res['documents'] = available_documents(case.itemid)
-    res['judgment'] = process_judgement_content(res)
     res['rank'] = float(res['rank'])
     res['respondentOrderEng'] = int(res['respondentOrderEng'])
     for k in res:
         if isinstance(res[k], datetime):
             res[k] = str(res[k].strftime('%Y-%m-%d'))
+    if with_html:
+        import re
+        re_prefix = re.compile(r"^\d+\.?")
+        def assign_html(node):
+            ents = node.get('metadata', {}).get('ents')
+            if ents:
+                if not node['elements']:
+                    text = node['content']
+                    html = displacy.render([{'ents': ents, 'text': text}], style="ent", page=True,
+                                               manual=True)
+                    soup = BeautifulSoup(html, 'html.parser')
+                    node['html'] = '\n'.join([str(e) for e in soup.div.contents])
+
+            for j, e in enumerate(node['elements']):
+                node['elements'][j] = assign_html(e)
+            return node
+
+        for i, part in enumerate(res['judgment']):
+            res['judgment'][i] = assign_html(part)
+    res['judgment'] = process_judgement_content(res)
+
+
     return res
 
 
@@ -82,7 +130,7 @@ def available_documents(itemid: str):
     return res
 
 
-def process_judgement_content(case):
+def process_judgement_content(case, content_key='content'):
     elements = case['judgment']
     apps = case['extractedapps']
 
@@ -90,10 +138,11 @@ def process_judgement_content(case):
         for e in elements:
             if not e['elements']:
                 for app in apps:
-                    e['content'] = re.sub(app,
+                    key = 'html' if 'html' in e else 'content'
+                    e[key] = re.sub(app,
                                           '<mark class="cited-app" id="{id}"><a href="/apps/{id}/">{app}</a></mark>'.format(
                                               id=app.replace(' ', '_').replace('/', '_').lower(), app=app),
-                                          e['content'])
+                                          e[key])
             e['elements'] = modify_tree(e['elements'], apps)
         return elements
 

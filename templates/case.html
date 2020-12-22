@@ -200,28 +200,29 @@
                       <ul class="toc_list">
                         {% for item in case.judgment recursive %}
                         {%- if item.elements -%}
-                          <li style="list-style: none;"><a href="#{{ item.content.replace(' ', '_').lower() if not 'section_name' in item else item.section_name }}">{{ item.content if not 'section_name' in item else item.section_name.title() }}</a>
+                          <li style="list-style: none;"><a href="#{{ item.content.replace(' ', '_').lower() if not 'section_name' in item else item.section_name }}">{{ item.content  }}</a>
                           <ul style="list-style: none;">{{ loop(item.elements) }}</ul>
                         {%- endif -%}
                         {% endfor %}
                       </ul>
                     </div>
+                    <div class="entities" style="line-height: 2.5; direction: ltr">
                     {% for item in case.judgment recursive %}
                         <li style="list-style: none;">
                           {%- if item.elements -%}
                             {% if loop.index > 1 %}
                               </br>
                             {% endif %}
-                          <h{{ loop.depth }} id="{{ item.content.replace(' ', '_').lower() if not 'section_name' in item else item.section_name }}">{{ item.content }}</h{{ loop.depth }}>
+                          <h{{ loop.depth }} id="{{ item.content.replace(' ', '_').lower() if not 'section_name' in item else item.section_name }}">{{ item.html|safe if item.html else item.content }}</h{{ loop.depth }}>
                           {%- else %}
-                            {{ item.content | regex_replace('^(\d+.)', '<b>\\1</b>') }}
+                            {{ item.html|safe if item.html else item.content | regex_replace('^(\d+.)', '<b>\\1</b>') }}
                           {%- endif %}
                         {%- if item.elements -%}
                           <ul style="list-style: none;">{{ loop(item.elements) }}</ul>
                         {%- endif %}
                         </li>
                     {% endfor %}
-
+                    </div>
                   </div>
                 </div>
               </div>

@@ -1,0 +1,80 @@
+
+{% extends "base.html" %}
+{% block content %}
+<script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.2.3.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.3.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.2.3.min.js"
+        crossorigin="anonymous"></script>
+{{ context.graph.script | safe}}
+{{ context.table.script | safe}}
+{{ context.table2.script | safe}}
+{{ context.pie.script | safe}}
+<div class="page-header">
+              <h1 class="page-title">
+                Statistics & Visualizations
+              </h1>
+            </div>
+            <div class="alert alert-info">
+                <h3>You have a question about the ECHR or the ECHR Open Data?</h3>
+                Please, open a ticket in <a href="https://github.com/echr-od/ECHR-OD_process/issues/"><strong>GitHub issue tracker</strong></a> and we might add a new visualization and example.
+            </div>
+            <div class="row row-cards row-deck">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                      <h3 class="card-title"><i>How many cases per article are in the database?</i></h3>
+                  </div>
+                    <div class="card-body">
+                        {{ context.graph.div | safe}}
+                        {{ context.table.div | safe}}
+                    </div>
+                    <div class="card-footer">
+                        <h5>How is the data obtained?</h5>
+                        The data is retrieved from the SQL database with the following query, containing two successing inner joins:
+                        <div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="background-color: transparent; border: 0px; margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">SELECT</span> conclusion.article, conclusion.<span style="color: #008800; font-weight: bold">type</span>, <span style="color: #008800; font-weight: bold">COUNT</span>(<span style="color: #008800; font-weight: bold">c</span>.itemid) <span style="color: #008800; font-weight: bold">FROM</span> <span style="color: #AA6600">&quot;case&quot;</span> <span style="color: #008800; font-weight: bold">as</span> <span style="color: #008800; font-weight: bold">c</span>
+<span style="color: #008800; font-weight: bold">INNER</span> <span style="color: #008800; font-weight: bold">JOIN</span> conclusioncase
+  <span style="color: #008800; font-weight: bold">ON</span> <span style="color: #008800; font-weight: bold">c</span>.itemid <span style="color: #333333">=</span> conclusioncase.case_id
+<span style="color: #008800; font-weight: bold">INNER</span> <span style="color: #008800; font-weight: bold">JOIN</span> conclusion
+  <span style="color: #008800; font-weight: bold">ON</span> conclusion.id <span style="color: #333333">=</span> conclusioncase.conclusion_id
+<span style="color: #008800; font-weight: bold">WHERE</span> conclusion.article <span style="color: #008800; font-weight: bold">NOT</span> <span style="color: #008800; font-weight: bold">NULL</span>
+<span style="color: #008800; font-weight: bold">GROUP</span> <span style="color: #008800; font-weight: bold">BY</span> conclusion.article, conclusion.<span style="color: #008800; font-weight: bold">type</span>;
+</pre></div>
+                        Please, note the need to enclose the table name "case" into brackets because case is a SQL keyword.
+
+                    </div>
+                </div>
+              </div>
+                <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                      <h3 class="card-title"><i>What are the countries with the largest number of cases accepted by the Court?</i></h3>
+                  </div>
+                    <div class="card-body">
+                        {{ context.table2.div | safe}}
+                        {{ context.pie.div | safe}}
+                        <p>
+                        The tooltip indicates the number of cases and in brackets, the percentage of total cases judged by the Court.
+                        Therefore, the percentages do not sum to 100%. However, the slices are proportional to their percentage. The missing slice accounts for all the other countries.
+                        </p>
+
+                    </div>
+                    <div class="card-footer">
+                        <h5>How is the data obtained?</h5>
+                        The data is retrieved from the SQL database first using the following :
+                        <div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="background-color: transparent; border: 0px; margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">SELECT</span> respondent, <span style="color: #008800; font-weight: bold">COUNT</span>(respondent) <span style="color: #008800; font-weight: bold">FROM</span> <span style="color: #AA6600">&quot;case&quot;</span> <span style="color: #008800; font-weight: bold">GROUP</span> <span style="color: #008800; font-weight: bold">BY</span> respondent;
+</pre></div>
+
+                        <p>Please, note the need to enclose the table name "case" into brackets because case is a SQL keyword.</p>
+
+                        <p>There is a bias as a small amount of cases concerns two countries at the same time, as for instance <a href="http://localhost/cases/001-157695">001-157695</a> that accout for Russia and Ukraine.
+                        The table and pie chart above takes into account this bias.</p>
+                    </div>
+                </div>
+              </div>
+            </div>
+
+
+</div>
+{% endblock %}

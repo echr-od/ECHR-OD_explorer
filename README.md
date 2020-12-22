@@ -16,7 +16,7 @@ The container requires two mountpoints:
 
 Once the image is built, the container is started with:
 ```
-docker run -ti 
+docker run -ti --rm -p 80:8005
     -v /var/run/docker.sock:/var/run/docker.sock:ro
     --mount src=$(pwd),dst=/tmp/echr_explorer/,type=bind 
     --mount src=<build>,dst=/tmp/echr_explorer/static/build,type=bind echr_explorer

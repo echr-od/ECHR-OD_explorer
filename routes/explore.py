@@ -5,12 +5,115 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 from playhouse.shortcuts import model_to_dict
 
+from bokeh.models import ColumnDataSource
+from bokeh.models.widgets import DataTable, DateFormatter, TableColumn
+from bokeh.palettes import Category20c, brewer, Turbo256
+from bokeh.transform import cumsum
+from bokeh.plotting import figure
+from bokeh.embed import components
+from math import pi
+import pandas as pd
+
 from config.template import templates
 from controllers import case as c_case
 from controllers.utils import COUNTRIES
 from data_models.case import Case
 
 router = APIRouter()
+
+
+@router.route('/charts/', include_in_schema=False)
+async def charts(request):
+    template = "charts.html"
+
+    res = list(c_case.get_stats().tuples())
+    violation = {e[0]: e[2] for e in res if e[1] == 'violation'}
+    no_violation = {e[0]: e[2] for e in res if e[1] == 'no-violation'}
+    articles = list(set(list(violation.keys()) + list(no_violation.keys())))
+    count_violation = [violation.get(k, 0) for k in articles]
+    count_no_violation = [no_violation.get(k, 0) for k in articles]
+
+    labels = ["no-violation", "violation"]
+    colors = ["#718dbf", "#e84d60"]
+
+    data = {'articles': articles,
+            'no-violation': count_no_violation,
+            'violation': count_violation}
+
+    p = figure(x_range=articles, plot_height=250, title="Cases per article", sizing_mode='stretch_width', #plot_width='100',
+               toolbar_location=None, tools="hover", tooltips="$name @articles: @$name")
+
+    p.vbar_stack(labels, x='articles', width=0.9, color=colors, source=data, legend_label=labels)
+    p.y_range.start = 0
+    p.xgrid.grid_line_color = None
+    p.axis.minor_tick_line_color = None
+    p.outline_line_color = None
+    p.legend.location = "top_left"
+    p.legend.orientation = "horizontal"
+
+    script, div = components(p)
+    graph = {
+        'script': script,
+        'div': div
+    }
+
+    source = ColumnDataSource(data)
+    columns = [
+        TableColumn(field="articles", title="Article"),
+        TableColumn(field="violation", title="Violation"),
+        TableColumn(field="no-violation", title="No Violation")
+    ]
+    data_table = DataTable(source=source, columns=columns, width=200, height=280, index_position=None)
+    script, div = components(data_table)
+    table = {
+        'script': script,
+        'div': div
+    }
+
+
+    case_per_country = c_case.get_cases_per_country()
+    number_of_countries = 10
+    data = pd.Series(case_per_country).reset_index(name='value').rename(columns={'index': 'country'})\
+        .sort_values('value', ascending=False)
+    data['pct'] = ((data['value'] / data['value'].sum()) * 100).round(2).astype(str) + '%'
+    part_data = data[:number_of_countries]
+    part_data['angle'] = part_data['value'] / data['value'].sum() * 2 * pi
+    part_data['color'] = Category20c[len(part_data)]
+
+    p = figure(plot_height=350, title=f"Top {number_of_countries} countries with most cases judged by the ECHR",
+               toolbar_location=None,
+               tools="hover", tooltips="@country: @value (@pct)", x_range=(-0.5, 1.0))
+
+    p.wedge(x=0, y=1, radius=0.4,
+            start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'),
+            line_color="white", fill_color='color', legend_field='country', source=part_data)
+
+    p.axis.axis_label = None
+    p.axis.visible = False
+    p.grid.grid_line_color = None
+
+    script, div = components(p)
+    pie = {
+        'script': script,
+        'div': div
+    }
+
+    source = ColumnDataSource(data)
+    columns = [
+        TableColumn(field="country", title="Country"),
+        TableColumn(field="value", title="Cases"),
+        TableColumn(field="pct", title="%")
+    ]
+    data_table = DataTable(source=source, columns=columns, height=280, index_position=None)
+    script, div = components(data_table)
+    table2 = {
+        'script': script,
+        'div': div
+    }
+
+    context = {"request": request, "context": {'graph': graph, 'table': table, 'pie': pie, 'table2': table2}}
+    return templates.TemplateResponse(template, context)
+
 
 
 @router.route('/explore/', include_in_schema=False)
@@ -103,9 +206,11 @@ async def get_cases(request: Request):
 
 @router.get('/cases/{itemid}', include_in_schema=False)
 async def show_case(request: Request, itemid: str):
-    case = c_case.get_case_info(itemid)
+    case = c_case.get_case_info(itemid, with_html=True)
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
+
+
     template = "case.html"
     context = {"request": request, 'case': case}
     return templates.TemplateResponse(template, context)

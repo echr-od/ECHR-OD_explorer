@@ -1,7 +1,6 @@
 import peewee as pw
 
-db = pw.SqliteDatabase(None, pragmas={'foreign_keys': 1})
-
+db = pw.SqliteDatabase(None)
 
 class BaseModel(pw.Model):
     class Meta:

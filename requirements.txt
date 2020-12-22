@@ -6,3 +6,7 @@ uvicorn
 peewee
 pyyaml
 pydantic
+spacy-nightly
+beautifulsoup4
+bokeh
+pandas
