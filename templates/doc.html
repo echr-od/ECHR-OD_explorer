@@ -19,6 +19,10 @@
                     class="fe fe-chevrons-right"></i></span>Creation process</a>
         </div>
         <div class="list-group list-group-transparent mb-0">
+            <a href="#faq" class="list-group-item list-group-item-action"><span class="icon mr-3"><i
+                    class="fe fe-chevrons-right"></i></span>Frequently Asked <Questions></Questions></a>
+        </div>
+        <div class="list-group list-group-transparent mb-0">
             <a href="#references" class="list-group-item list-group-item-action"><span class="icon mr-3"><i
                     class="fe fe-chevrons-right"></i></span>References</a>
         </div>
@@ -98,6 +102,50 @@
         </div>
     </div>
 </div>
+
+
+<h2 class="mt-0 mb-4" id="faq">Frequently Asked Questions & Examples</h2>
+<div class="alert alert-info">
+                <h3>You have a question about the ECHR or the ECHR Open Data?</h3>
+                Please, open a ticket in <a href="https://github.com/echr-od/ECHR-OD_process/issues/"><strong>GitHub issue tracker</strong></a> and we might add a new answer and example.
+            </div>
+
+
+
+            <div class="row row-cards row-deck">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                      <h3 class="card-title"><i>How to access a specific section in a judgment?</i></h3>
+                  </div>
+                    <div class="card-body">
+                        <p>We assume you need a textual representation of a specific section of the judgment document, for instance <strong>The Facts</strong>.</p>
+                        <p>We also assume that you do not want to use SQL but rather a python library such as <code>pandas</code>.</p>
+
+                        <h4 style="margin-left: 1em; padding-top: 1em; padding-bottom: 1em">1. Locating the proper section in the judgment document</h4>
+                        <p>First, you need to load the file containing all the information about all cases: <code>build/unstructured/cases.json</code>.</p>
+
+                        The file contains a list of dictionary where each dictionary represents all the information about a case.<br/>
+                        The content of documents associated to a given case is under the key <code>content</code>. The field <code>content</code> contains itself a dictionary of documents related to a case.
+                        <div class="alert alert-info">
+                            Currently, there is only one document which is the <strong>judgment document</strong>.
+                        </div>
+                        The judgment representation has the form of a tree where each node is:
+<pre>{
+	'content': "paragraph_or_section_title"
+	'elements': [<children>]
+}</pre>
+                        <p>For first level nodes, corresponding to the main sections of the judgment, there is an attribute <code>section_name</code> to identify specific sections.</p>
+                        <p>It is then enough to find the node with the attribute <code>section_name": "facts"</code>.</p>
+
+                        <h4 style="margin-left: 1em; padding-top: 1em; padding-bottom: 1em">2. Reconstructing the text for the specific section</h4>
+                            <p>With the content of the section, if you need just the full text, you need to recursively reconstruct it.</p>
+                            <p>This can be done by recursively aggregating each node using the following function:</p>
+                        <script src="https://gist.github.com/aquemy/9965f6dd6263223e6f3b793a8bf5262a.js"></script>
+                    </div>
+                </div>
+              </div>
+            </div>
 
 <div class="row row-cards">
     <div class="col">
