@@ -10,6 +10,8 @@ from utils.config import config
 from config.template import templates
 from echr.data_models.base import db
 from echr.data_models.case import Case
+from echr.data_models.article import Article
+from echr.data_models.conclusion import Conclusion, ConclusionCase, ConclusionDetail, ConclusionMention
 from echr.data_models.detail import Detail
 from echr.data_models.party import Party
 from echr.data_models.kpthesaurus import KPThesaurus
