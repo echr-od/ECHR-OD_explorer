@@ -13,8 +13,10 @@ from echr.data_models.case import Case
 from echr.data_models.article import Article
 from echr.data_models.conclusion import Conclusion, ConclusionCase, ConclusionDetail, ConclusionMention
 from echr.data_models.detail import Detail
+from echr.data_models.mention import Mention
 from echr.data_models.party import Party
 from echr.data_models.kpthesaurus import KPThesaurus
+from echr.data_models.representative import Representative
 from echr.data_models.issue import Issue
 from echr.data_models.documentcollectionid import DocumentCollectionId
 from echr.data_models.extractedappno import ExtractedApp
