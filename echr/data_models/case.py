@@ -1,6 +1,6 @@
 import peewee as pw
 from playhouse.sqlite_ext import JSONField
-from data_models.base import BaseModel
+from echr.data_models.base import BaseModel
 
 
 class Case(BaseModel):

@@ -1,4 +1,4 @@
-from data_models.scl import SCL
+from echr.data_models.scl import SCL
 
 
 def get_scls():

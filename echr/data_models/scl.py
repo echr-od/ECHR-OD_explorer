@@ -1,6 +1,6 @@
 import peewee as pw
-from data_models.base import BaseModel
-from data_models.case import Case
+from echr.data_models.base import BaseModel
+from echr.data_models.case import Case
 
 
 class SCL(BaseModel):
@@ -12,4 +12,7 @@ class SCLCase(BaseModel):
     case = pw.ForeignKeyField(Case, backref='scl')
 
     class Meta:
+        '''
+            Metaclass to assign the primary key
+        '''
         primary_key = pw.CompositeKey('scl', 'case')

@@ -5,10 +5,12 @@ from spacy import displacy
 from playhouse.shortcuts import model_to_dict
 from bs4 import BeautifulSoup
 from controllers.utils import COUNTRIES, DOCS_FOLDERS
-from data_models.case import Case
-from data_models.conclusion import ConclusionCase, Conclusion
-from data_models.entity import Entity
+from echr.data_models.case import Case
+from echr.data_models.conclusion import ConclusionCase, Conclusion
+from echr.data_models.entity import Entity
+from echr.data_models.attachment import Table
 from peewee import fn
+from json2html import *
 
 
 def get_cases(page: int = 1, limit: int = 100):
@@ -102,11 +104,14 @@ def get_case_info(itemid: str, with_html=False):
                 node['elements'][j] = assign_html(e)
             return node
 
+        tables = Table.select().where(Table.case == case.itemid)
+        table_map = {}
+        for table in tables:
+            table_map[table.tag] = table.content
         for i, part in enumerate(res['judgment']):
             res['judgment'][i] = assign_html(part)
-    res['judgment'] = process_judgement_content(res)
-
-
+    res['judgment'] = process_judgement_content(res, table_map)
+    res['tables'] = table_map
     return res
 
 
@@ -130,20 +135,28 @@ def available_documents(itemid: str):
     return res
 
 
-def process_judgement_content(case, content_key='content'):
+def json_table_to_html(table, tag):
+    return json2html.convert(table, table_attributes="id=\"{}\" class=\"judgment-table\"".format(tag))
+
+
+def process_judgement_content(case, tables=None, content_key='content'):
     elements = case['judgment']
     apps = case['extractedapps']
 
-    def modify_tree(elements, apps):
+    def modify_tree(elements, apps, tables=None):
         for e in elements:
             if not e['elements']:
+                key = 'html' if 'html' in e else 'content'
+                if tables and e[key].startswith('table') and e[key] in tables:
+                    table = tables.get(e[key])
+                    if table:
+                        e['html'] = json_table_to_html(table, e[key])
                 for app in apps:
-                    key = 'html' if 'html' in e else 'content'
                     e[key] = re.sub(app,
                                           '<mark class="cited-app" id="{id}"><a href="/apps/{id}/">{app}</a></mark>'.format(
                                               id=app.replace(' ', '_').replace('/', '_').lower(), app=app),
                                           e[key])
-            e['elements'] = modify_tree(e['elements'], apps)
+            e['elements'] = modify_tree(e['elements'], apps, tables)
         return elements
 
-    return modify_tree(elements, apps)
+    return modify_tree(elements, apps, tables)

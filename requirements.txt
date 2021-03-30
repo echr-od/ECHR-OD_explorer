@@ -10,3 +10,4 @@ spacy-nightly
 beautifulsoup4
 bokeh
 pandas
+json2html

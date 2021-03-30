@@ -12,7 +12,7 @@ from data_models.mention import Mention
 from data_models.party import Party, PartyCase
 from data_models.kpthesaurus import KPThesaurus
 from data_models.representative import Representative, RepresentativeCase
-from data_models.issue import Issue
+from echr.data_models.issue import Issue
 from data_models.documentcollectionid import DocumentCollectionId
 from data_models.extractedappno import ExtractedApp
 from data_models.scl import SCL, SCLCase

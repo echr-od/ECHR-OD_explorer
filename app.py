@@ -8,21 +8,17 @@ import os
 
 from utils.config import config
 from config.template import templates
-from data_models.base import db
-from data_models.case import Case
-from data_models.article import Article
-from data_models.conclusion import Conclusion, ConclusionCase, ConclusionDetail, ConclusionMention
-from data_models.detail import Detail
-from data_models.mention import Mention
-from data_models.party import Party
-from data_models.kpthesaurus import KPThesaurus
-from data_models.representative import Representative
-from data_models.issue import Issue
-from data_models.documentcollectionid import DocumentCollectionId
-from data_models.extractedappno import ExtractedApp
-from data_models.scl import SCL
-from data_models.decisionbody import DecisionBodyMember, DecisionBodyCase
-from data_models.externalsource import ExternalSource
+from echr.data_models.base import db
+from echr.data_models.case import Case
+from echr.data_models.detail import Detail
+from echr.data_models.party import Party
+from echr.data_models.kpthesaurus import KPThesaurus
+from echr.data_models.issue import Issue
+from echr.data_models.documentcollectionid import DocumentCollectionId
+from echr.data_models.extractedappno import ExtractedApp
+from echr.data_models.scl import SCL
+from echr.data_models.decisionbody import DecisionBodyMember, DecisionBodyCase
+from echr.data_models.externalsource import ExternalSource
 
 db_path = os.path.join(config()['data']['data_folder'], config()['data']['build_name'], 'structured', 'echr-db.db')
 db.init(db_path)

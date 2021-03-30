@@ -6,7 +6,7 @@ from starlette.responses import FileResponse
 
 from config.template import templates
 from controllers import case as c_case
-from data_models.case import Case
+from echr.data_models.case import Case
 from utils.config import config
 
 router = APIRouter()
