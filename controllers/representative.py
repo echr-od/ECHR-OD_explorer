@@ -1,4 +1,4 @@
-from data_models.representative import Representative
+from echr.data_models.representative import Representative
 
 
 def get_representatives():

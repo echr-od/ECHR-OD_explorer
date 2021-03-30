@@ -1,5 +1,5 @@
 import peewee as pw
-from data_models.base import BaseModel
+from echr.data_models.base import BaseModel
 
 
 class Detail(BaseModel):

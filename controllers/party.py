@@ -1,4 +1,4 @@
-from data_models.party import Party
+from echr.data_models.party import Party
 
 
 def get_parties():

@@ -1,4 +1,4 @@
-from data_models.conclusion import Conclusion
+from echr.data_models.conclusion import Conclusion
 
 
 def get_conclusions():

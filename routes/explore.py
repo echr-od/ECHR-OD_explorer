@@ -17,7 +17,7 @@ import pandas as pd
 from config.template import templates
 from controllers import case as c_case
 from controllers.utils import COUNTRIES
-from data_models.case import Case
+from echr.data_models.case import Case
 
 router = APIRouter()
 
@@ -142,7 +142,7 @@ async def get_cases(request: Request):
                 req[k] = v
         return req
 
-    from data_models.base import db
+    from echr.data_models.base import db
     @db.collation()
     def country_asc(s1, s2):
         return COUNTRIES[s1.split(';')[0]]['name'] < COUNTRIES[s2.split(';')[0]]['name']

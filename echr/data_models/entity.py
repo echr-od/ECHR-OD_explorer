@@ -1,7 +1,7 @@
 import peewee as pw
-from data_models.base import BaseModel
-from data_models.judgment import JudgmentElement
-from data_models.case import Case
+from echr.data_models.base import BaseModel
+from echr.data_models.judgment import JudgmentElement
+from echr.data_models.case import Case
 
 class Entity(BaseModel):
     id = pw.AutoField()
