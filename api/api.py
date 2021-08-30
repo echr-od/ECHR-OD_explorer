@@ -16,24 +16,11 @@ from schemas.case import Case as sCase
 from controllers.utils import DOCS_FOLDERS
 from utils.config import config
 
-api = FastAPI(openapi_prefix="/api/v1/")
-
-def custom_openapi():
-    if api.openapi_schema:
-        return api.openapi_schema
-    openapi_schema = get_openapi(
-        title="European Court of Human Rights OpenData API",
-        version="1.0.0",
-        description="European Court of Human Rights OpenData OpenAPI schema",
-        routes=api.routes,
-        #openapi_prefix="/api/v1"
-    )
-    api.openapi_schema = openapi_schema
-    return api.openapi_schema
-
-
-api.openapi = custom_openapi
-
+api = FastAPI(
+    title="European Court of Human Rights OpenData API",
+    version="1.0.0",
+    description="European Court of Human Rights OpenData OpenAPI schema",
+    root_path="/api/v1/")
 
 @api.get("/stats")
 def get_stats():
