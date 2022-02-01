@@ -4,7 +4,7 @@ ENV DOCKER_VERSION='19.03.9'
 WORKDIR /tmp/echr_explorer/
 COPY requirements.txt .
 
-RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install --upgrade pip==21.3.1
 RUN python3 -m pip install --no-cache-dir  -r requirements.txt
 
 RUN set -ex \
