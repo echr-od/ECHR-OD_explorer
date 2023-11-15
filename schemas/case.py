@@ -27,10 +27,8 @@ class Case(BaseModel):
     rank: str
     representedby: List[str]
     respondent: str
-    respondentOrderEng: str
     scl: List[str]
     separateopinion: str
-    sharepointid: str
     typedescription: str
 
     class Config:

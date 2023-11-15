@@ -83,7 +83,6 @@ def get_case_info(itemid: str, with_html=False):
     res['originatingbody'] = {'name': case.originatingbody_name, 'type': case.originatingbody_type}
     res['documents'] = available_documents(case.itemid)
     res['rank'] = float(res['rank'])
-    res['respondentOrderEng'] = int(res['respondentOrderEng'])
     for k in res:
         if isinstance(res[k], datetime):
             res[k] = str(res[k].strftime('%Y-%m-%d'))
